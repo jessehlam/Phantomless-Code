@@ -1,0 +1,640 @@
+{
+  "OutputName": "one_layer_all_detectors",
+  "N": 100,
+  "Options": {
+    "Seed": 0,
+    "RandomNumberGeneratorType": "MersenneTwister",
+    "AbsorptionWeightingType": "Discrete",
+    "PhaseFunctionType": "HenyeyGreenstein",
+    "Databases": [],
+    "TrackStatistics": false,
+    "RussianRouletteWeightThreshold": 0.0,
+    "SimulationIndex": 0
+  },
+  "SourceInput": {
+    "$type": "Vts.MonteCarlo.DirectionalPointSourceInput, Vts",
+    "SourceType": "DirectionalPoint",
+    "PointLocation": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0
+    },
+    "Direction": {
+      "Ux": 0.0,
+      "Uy": 0.0,
+      "Uz": 1.0
+    },
+    "InitialTissueRegionIndex": 0
+  },
+  "TissueInput": {
+    "$type": "Vts.MonteCarlo.MultiLayerTissueInput, Vts",
+    "TissueType": "MultiLayer",
+    "Regions": [
+      {
+        "$type": "Vts.MonteCarlo.Tissues.LayerRegion, Vts",
+        "TissueRegionType": "Layer",
+        "ZRange": {
+          "Start": "-Infinity",
+          "Stop": 0.0,
+          "Count": 2
+        },
+        "RegionOP": {
+          "Mua": 0.0,
+          "Mus": 1E-10,
+          "G": 1.0,
+          "N": 1.0,
+          "Musp": 1E-10
+        }
+      },
+      {
+        "$type": "Vts.MonteCarlo.Tissues.LayerRegion, Vts",
+        "TissueRegionType": "Layer",
+        "ZRange": {
+          "Start": 0.0,
+          "Stop": 100.0,
+          "Count": 2
+        },
+        "RegionOP": {
+          "Mua": 0.01,
+          "Mus": 5.0000000000000009,
+          "G": 0.8,
+          "N": 1.4,
+          "Musp": 1.0
+        }
+      },
+      {
+        "$type": "Vts.MonteCarlo.Tissues.LayerRegion, Vts",
+        "TissueRegionType": "Layer",
+        "ZRange": {
+          "Start": 100.0,
+          "Stop": "Infinity",
+          "Count": 2
+        },
+        "RegionOP": {
+          "Mua": 0.0,
+          "Mus": 1E-10,
+          "G": 1.0,
+          "N": 1.0,
+          "Musp": 1E-10
+        }
+      }
+    ]
+  },
+  "DetectorInputs": [
+    {
+      "$type": "Vts.MonteCarlo.Detectors.RDiffuseDetectorInput, Vts",
+      "TallyType": "RDiffuse",
+      "Name": "RDiffuse",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfAngleDetectorInput, Vts",
+      "Angle": {
+        "Start": 1.5707963267948966,
+        "Stop": 3.1415926535897931,
+        "Count": 5
+      },
+      "TallyType": "ROfAngle",
+      "Name": "ROfAngle",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfRhoDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "ROfRho",
+      "Name": "ROfRho",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfRhoAndAngleDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Angle": {
+        "Start": 1.5707963267948966,
+        "Stop": 3.1415926535897931,
+        "Count": 5
+      },
+      "TallyType": "ROfRhoAndAngle",
+      "Name": "ROfRhoAndAngle",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfRhoAndTimeDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Time": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "ROfRhoAndTime",
+      "Name": "ROfRhoAndTime",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfXAndYDetectorInput, Vts",
+      "X": {
+        "Start": -100.0,
+        "Stop": 100.0,
+        "Count": 21
+      },
+      "Y": {
+        "Start": -100.0,
+        "Stop": 100.0,
+        "Count": 21
+      },
+      "TallyType": "ROfXAndY",
+      "Name": "ROfXAndY",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ROfRhoAndOmegaDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Omega": {
+        "Start": 0.0,
+        "Stop": 1.0,
+        "Count": 21
+      },
+      "TallyType": "ROfRhoAndOmega",
+      "Name": "ROfRhoAndOmega",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": true,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.TDiffuseDetectorInput, Vts",
+      "TallyType": "TDiffuse",
+      "Name": "TDiffuse",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": true,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.TOfAngleDetectorInput, Vts",
+      "Angle": {
+        "Start": 0.0,
+        "Stop": 1.5707963267948966,
+        "Count": 5
+      },
+      "TallyType": "TOfAngle",
+      "Name": "TOfAngle",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": true,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.TOfRhoDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "TOfRho",
+      "Name": "TOfRho",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": true,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.TOfRhoAndAngleDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Angle": {
+        "Start": 0.0,
+        "Stop": 1.5707963267948966,
+        "Count": 5
+      },
+      "TallyType": "TOfRhoAndAngle",
+      "Name": "TOfRhoAndAngle",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": true,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.ATotalDetectorInput, Vts",
+      "TallyType": "ATotal",
+      "Name": "ATotal",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.AOfRhoAndZDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "AOfRhoAndZ",
+      "Name": "AOfRhoAndZ",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.AOfXAndYAndZDetectorInput, Vts",
+      "TallyType": "AOfXAndYAndZ",
+      "Name": "AOfXAndYAndZ",
+      "X": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 201
+      },
+      "Y": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 2
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.FluenceOfRhoAndZDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "FluenceOfRhoAndZ",
+      "Name": "FluenceOfRhoAndZ",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.FluenceOfRhoAndZAndTimeDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Time": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallyType": "FluenceOfRhoAndZAndTime",
+      "Name": "FluenceOfRhoAndZAndTime",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.FluenceOfXAndYAndZDetectorInput, Vts",
+      "TallyType": "FluenceOfXAndYAndZ",
+      "Name": "FluenceOfXAndYAndZ",
+      "X": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 201
+      },
+      "Y": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 2
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.RadianceOfRhoAndZAndAngleDetectorInput, Vts",
+      "Rho": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Angle": {
+        "Start": 0.0,
+        "Stop": 3.1415926535897931,
+        "Count": 3
+      },
+      "TallyType": "RadianceOfRhoAndZAndAngle",
+      "Name": "RadianceOfRhoAndZAndAngle",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": true,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.RadianceOfXAndYAndZAndThetaAndPhiDetectorInput, Vts",
+      "TallyType": "RadianceOfXAndYAndZAndThetaAndPhi",
+      "Name": "RadianceOfXAndYAndZAndThetaAndPhi",
+      "X": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Y": {
+        "Start": -10.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Z": {
+        "Start": 0.0,
+        "Stop": 10.0,
+        "Count": 101
+      },
+      "Theta": {
+        "Start": 0.0,
+        "Stop": 3.1415926535897931,
+        "Count": 5
+      },
+      "Phi": {
+        "Start": -3.1415926535897931,
+        "Stop": 3.1415926535897931,
+        "Count": 5
+      },
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": false,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": true,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": true,
+        "IsNotImplementedYet": false
+      }
+    },
+    {
+      "$type": "Vts.MonteCarlo.Detectors.RSpecularDetectorInput, Vts",
+      "TallyType": "RSpecular",
+      "Name": "RSpecular",
+      "TallySecondMoment": false,
+      "TallyDetails": {
+        "IsReflectanceTally": false,
+        "IsTransmittanceTally": false,
+        "IsSpecularReflectanceTally": true,
+        "IsInternalSurfaceTally": false,
+        "IspMCReflectanceTally": false,
+        "IsDosimetryTally": false,
+        "IsVolumeTally": false,
+        "IsCylindricalTally": false,
+        "IsNotImplementedForDAW": false,
+        "IsNotImplementedForCAW": false,
+        "IsNotImplementedYet": false
+      }
+    }
+  ]
+}
