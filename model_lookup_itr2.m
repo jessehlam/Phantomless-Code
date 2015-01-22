@@ -4,7 +4,8 @@
 %INO5 @778  0.009314095	0.801617501
 
 warning('off'); %Keep off unless you want a lot of orange warning text
-cd('C:\Users\Jesse\Dropbox\Phantomless\phantomless_cal4\VTS'); %Directory of VTS
+%cd('C:\Users\Jesse\Dropbox\Phantomless\phantomless_cal4\VTS'); %Directory of VTS
+cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\VTS'); %Directory of VTS
 startup();
 
 %% Iteratively Checking MUa & MUs

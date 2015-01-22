@@ -37,7 +37,7 @@ n_filter = 1.5; %Index of refraction of glass
 n = 1.43; %Index of refraction of sample
 c = 2.9979*10^11;   %mm/s in air
 freqstart=.05; %Instrument starting frequency (GHz)
-freqend=.8; %Instrument ending frequency (GHz)
+freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
@@ -51,9 +51,9 @@ highfrqdata=0; %Calibrate using high frequency data?
 simdat=1; %Use simulated, test data?
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
-calfreq=.6; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.005:.001:.02; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.5:.1:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+calfreq=.30; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
+mua=.005:.0005:.02; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.5:.005:1; %Range and resolution of MUs, based on typical physiological values for human tissue
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
 frqnum2=floor((calfreqstart-freqstart)/freqstep)+1; %The element number containing the calibration frequency, starting
