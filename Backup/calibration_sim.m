@@ -14,20 +14,31 @@ op = [phanop 0.8 n]; %Optical properties. vts assumed g=0.8 by default
 VtsSolvers.SetSolverType('PointSourceSDA'); %VTS to get model
 vtsmod = VtsSolvers.ROfRhoAndFt(op, rho, ft); %Solver type
 
-% vtsmod = awgn(vtsmod,140); % Add noise at SNR of 140 (reasonable may be changed)
+% Noise Options
+% Base noise
+vtsmod = awgn(vtsmod,137); % Add noise at SNR of ~140 (reasonable may be changed)
 
-vtsfit = polyfit(ft',abs(vtsmod),3);
+% Options for adding complex noise
+% vtsmod = vtsmod+sin(45*(ft'+.3)).*abs(randn(length(vtsmod),1))*2.5e-7;
+% vtsmod = vtsmod+sin(100*(ft'+rand))*2.5e-7%+(randn(length(vtsmod),1))*1e-7;
+
+vtsfit = polyfit(ft',abs(vtsmod),3); %Option to change order of poly fit
 vtspoly = polyval(vtsfit,ft');
 vts_curramp = abs(vtsmod)/vtspoly(1);
-curramp = vts_curramp;
+
+% Amplitude Noise
+% Added sin wave with amplitude related to Freq, random phase shift
+curramp = vts_curramp+(sin(100*ft'+pi*rand).*((rand/8+ft')*.1));
+
 mod_phi = -angle(vtsmod); %Recovering the phase
 currphi = mod_phi*180/pi; %Convert from radians to degrees
 currphi = currphi-currphi(1); %Normalizing the phase
 
-subplot(2,1,1)
-scatter(ft,vts_curramp)
-subplot(2,1,2)
-scatter(ft,currphi)
+% % Plot signal
+% subplot(2,1,1)
+% scatter(ft,curramp)
+% subplot(2,1,2)
+% scatter(ft,currphi)
 
 % mod_amp = abs(vtsmod); %Recovering amplitude
 % curramp = mod_amp./mod_amp(1); %Normalizing the VTS model
