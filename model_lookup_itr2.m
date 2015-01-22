@@ -4,9 +4,8 @@
 %INO5 @778  0.009314095	0.801617501
 
 warning('off'); %Keep off unless you want a lot of orange warning text
-cd('C:\Users\Jesse\Dropbox\Phantomless\phantomless_cal4\VTS'); %Directory of VTS
+cd(vtsdir); %Directory of VTS
 startup();
-
 %% Iteratively Checking MUa & MUs
 itr=0; %Counter for iteration number
 errmat=100000; %Default error value. Make it ridiculously large.
