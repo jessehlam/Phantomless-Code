@@ -1,7 +1,5 @@
 %dbstop if error;
 
-
-
 %% Pop ups
 %Add the VTS files to the MATLAB path
 
@@ -9,7 +7,7 @@ defaultdir=pwd; %Keep current directory to return to after program finishes
 mpth=mfilename('fullpath'); %Get path of current m file
 mname=mfilename; %Getting name of function to remove from path
 mpth=mpth(1:length(mpth)-length(mfilename)); %Removing filename from path
-cd(mpth); %Change dir to this script path
+% cd(mpth); %Change dir to this script path
 
 if exist('output','var')==1 && length(output)==4 && exist('pth','var')==1 && pth(1)>0; %If there was a previous processing
     clearvars -except output pth defaultdir %Keep previous values
@@ -43,13 +41,13 @@ freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
-testname = 'test10';
+testname = 'test13';
 %% Options
 plots=1; %Turns plotting on or off
 plotraws=1; %Plot the raw data?
     plotrawcal=1; %Plot the raw non-normalized, calibrated data?
 plotfit=1; %Plot the polynomial fits?
-highfrqdata=0; %Calibrate using high frequency data?
+highfrqdata=1; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
@@ -80,8 +78,14 @@ if simdat==0
         sample_file=samp{1};
         calfile=samp{2};
     end
+    
+    if highfrqdata == 1
+        samplef_file=samp{4};
+        calfilef = samp{3};
+    end
 end
 
+cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle
 %% Running the next scripts
 
 %opening higher frequency data
@@ -89,11 +93,13 @@ if highfrqdata == 1
     openhighfrq
 end
 
+cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle
 %Importing data
 if simdat==0
     openfiles
 end
 
+cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle
 %Calibrating
 if simdat==1
     cd(pth)
@@ -105,12 +111,22 @@ end
 %Calibrating high frq data
 if highfrqdata == 1
     highfrq
+    ft = [ft highffile.data(1,1)/1000];
 end
 
+
 %Recover optical properties
+
+if highfrqdata == 1
+   curramp2 = [curramp; highfavg.amp];
+   currphi2 = [currphi; highfavg.phi];
+   highf_amp_weight = 200;
+   highf_phi_weight = 0;
+end
+
 model_lookup_itr2 %Attempts to recovers optical properties
 
 %% Plotting
-if simdat==0
-    plotter %Comment out if using simulated data
-end
+% if simdat==0
+%     plotter %Comment out if using simulated data
+% end

@@ -28,10 +28,18 @@ for i=1:length(mua)
         mod_phi_itr = -angle(vtsmod_itr); %Recovering the phase
         currphi_itr = mod_phi_itr*180/pi; %Convert from radians to degrees
         currphi_itr = currphi_itr-currphi_itr(1); %Normalizing the phase
-        
+     
         erramp=sum(abs((curramp(frqnum2:frqnum)-curramp_itr(frqnum2:frqnum)))./curramp(frqnum2:frqnum)); %Amplitude error
         errphi=sum(abs((currphi(frqnum2+1:frqnum)-currphi_itr(frqnum2+1:frqnum)))./currphi(frqnum2+1:frqnum)); %Phase error
-        errtest=erramp+errphi;
+        
+        if highfrqdata ==1         
+            erramp_highf = abs(curramp2(402)-curramp_itr(402))./curramp2(402);
+            errphi_highf = abs(currphi2(402)-currphi_itr(402))./currphi2(402);
+            errtest = erramp+errphi+erramp_highf*highf_amp_weight+errphi_highf*highf_phi_weight;
+        else
+            errtest=erramp+errphi;
+        end
+            
         
         if errtest<errmat
             errmat=errtest; %Saving the minimum error
@@ -64,22 +72,44 @@ currphi_fin = currphi_fin-currphi_fin(1); %Normalizing the phase
 
 disp(strcat('Recovered [MUa MUs]:',num2str(mu))) %Displaying recovered optical properties
 % optical_prop_string=num2str(mu);
-save(strcat(testname,'.mat'),'mu','phanop','ft','mua','mus')% disp(strcat('Recovered MUs:',num2str(recoveredmus)))
-
-figure
-subplot(2,1,1) %Plotting the "tissue" and optimized amplitude
-plot(ft(frqnum2:frqnum),curramp(frqnum2:frqnum),'b*','linewidth',2);
-hold on;
-plot(ft(frqnum2:frqnum),curramp_fin(frqnum2:frqnum),'r*');
-ylabel('Normalized Amplitude');
-legend('Data','Recovered','Location','Best');
-hold off
-
-subplot(2,1,2) %Plotting the "tissue" and optimized phase
-plot(ft(frqnum2:frqnum),currphi(frqnum2:frqnum),'b*','linewidth',2); 
-hold on;
-plot(ft(frqnum2:frqnum),currphi_fin(frqnum2:frqnum),'r*');
-xlabel('Frequency (GHz)');
-ylabel('Phase (Degrees)');
-legend('Data','Recovered','Location','Best');
-hold off
+% disp(strcat('Recovered MUs:',num2str(recoveredmus)))
+if highfrqdata == 1
+    
+    save(strcat(testname,'.mat'),'mu','ft','mua','mus','highf_amp_weight','highf_phi_weight')
+    figure
+    subplot(2,1,1) %Plotting the "tissue" and optimized amplitude
+    scatter(ft,curramp2,'b*','linewidth',2);
+    hold on;
+    scatter(ft,curramp_fin,'r*');
+    ylabel('Normalized Amplitude');
+    legend('Data','Recovered','Location','Best');
+    hold off
+    
+    subplot(2,1,2) %Plotting the "tissue" and optimized phase
+    scatter(ft,currphi2,'b*','linewidth',2); 
+    hold on;
+    scatter(ft,currphi_fin,'r*');
+    xlabel('Frequency (GHz)');
+    ylabel('Phase (Degrees)');
+    legend('Data','Recovered','Location','Best');
+    hold off
+else
+    save(strcat(testname,'.mat'),'mu','ft','mua','mus')
+    figure
+    subplot(2,1,1) %Plotting the "tissue" and optimized amplitude
+    plot(ft(frqnum2:frqnum),curramp(frqnum2:frqnum),'b*','linewidth',2);
+    hold on;
+    plot(ft(frqnum2:frqnum),curramp_fin(frqnum2:frqnum),'r*');
+    ylabel('Normalized Amplitude');
+    legend('Data','Recovered','Location','Best');
+    hold off
+    
+    subplot(2,1,2) %Plotting the "tissue" and optimized phase
+    plot(ft(frqnum2:frqnum),currphi(frqnum2:frqnum),'b*','linewidth',2); 
+    hold on;
+    plot(ft(frqnum2:frqnum),currphi_fin(frqnum2:frqnum),'r*');
+    xlabel('Frequency (GHz)');
+    ylabel('Phase (Degrees)');
+    legend('Data','Recovered','Location','Best');
+    hold off
+end
