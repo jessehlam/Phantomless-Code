@@ -1,7 +1,6 @@
 %dbstop if error;
-clear
-clc
-testname = 'test2';
+
+
 
 %% Pop ups
 %Add the VTS files to the MATLAB path
@@ -44,7 +43,7 @@ freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
-
+testname = 'test10';
 %% Options
 plots=1; %Turns plotting on or off
 plotraws=1; %Plot the raw data?
