@@ -14,7 +14,7 @@ if exist('output','var')==1 && length(output)==4 && exist('pth','var')==1 && pth
     default={output{1},output{2},output{3},output{4}}; %Input previous values
 else %If fresh processing
     clearvars -except defaultdir
-    default={'20','95','4','690'}; %Default values displayed per box
+    default={'20','95','4','800'}; %Default values displayed per box
     pth=defaultdir;
 end
 
@@ -41,7 +41,7 @@ freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
-testname = 'test13';
+testname = 'test18';
 %% Options
 plots=1; %Turns plotting on or off
 plotraws=1; %Plot the raw data?
@@ -52,8 +52,12 @@ simdat=0; %Use simulated, test data?
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
 calfreq=.3; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.005:.0005:.02; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.5:.005:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+% mua=.00792; %Range and resolution of MUa, based on typical physiological values for human tissue
+% mus=.90632; %Range and resolution of MUs, based on typical physiological values for human tissue
+mua=.005:.0001:.02; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.5:.001:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+
+
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
 frqnum2=floor((calfreqstart-freqstart)/freqstep)+1; %The element number containing the calibration frequency, starting
@@ -102,7 +106,7 @@ end
 cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle
 %Calibrating
 if simdat==1
-    cd(pth)
+%     cd(pth)
     calibration_sim %If using simulated data
 else
     calibration_itr %Calibrates out system response
@@ -110,20 +114,24 @@ end
 
 %Calibrating high frq data
 if highfrqdata == 1
-    highfrq
     ft = [ft highffile.data(1,1)/1000];
+    highfrq   
 end
 
 
 %Recover optical properties
 
 if highfrqdata == 1
+%    if highfavg.phi>180
+%        highfavg.phi = highfavg.phi-180
+%    end
    curramp2 = [curramp; highfavg.amp];
    currphi2 = [currphi; highfavg.phi];
-   highf_amp_weight = 200;
+   highf_amp_weight = 50;
    highf_phi_weight = 0;
 end
 
+cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle
 model_lookup_itr2 %Attempts to recovers optical properties
 
 %% Plotting

@@ -30,12 +30,14 @@ for i=1:length(mua)
         currphi_itr = currphi_itr-currphi_itr(1); %Normalizing the phase
      
         erramp=sum(abs((curramp(frqnum2:frqnum)-curramp_itr(frqnum2:frqnum)))./curramp(frqnum2:frqnum)); %Amplitude error
-        errphi=sum(abs((currphi(frqnum2+1:frqnum)-currphi_itr(frqnum2+1:frqnum)))./currphi(frqnum2+1:frqnum)); %Phase error
+%         errphi=sum(abs((currphi(frqnum2+1:frqnum)-currphi_itr(frqnum2+1:frqnum)))./currphi(frqnum2+1:frqnum)); %Phase error
         
         if highfrqdata ==1         
             erramp_highf = abs(curramp2(402)-curramp_itr(402))./curramp2(402);
             errphi_highf = abs(currphi2(402)-currphi_itr(402))./currphi2(402);
-            errtest = erramp+errphi+erramp_highf*highf_amp_weight+errphi_highf*highf_phi_weight;
+%             errtest = erramp+errphi+erramp_highf*highf_amp_weight+errphi_highf*highf_phi_weight;
+            errtest = erramp+erramp_highf*highf_amp_weight+errphi_highf*highf_phi_weight;
+
         else
             errtest=erramp+errphi;
         end

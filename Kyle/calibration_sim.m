@@ -19,7 +19,7 @@ vtsmod = VtsSolvers.ROfRhoAndFt(op, rho, ft); %Solver type
 
 % Noise Options
 % Base noise
-vtsmod = awgn(vtsmod,137); % Add noise at SNR of ~140 (reasonable may be changed)
+% vtsmod = awgn(vtsmod,137); % Add noise at SNR of ~140 (reasonable may be changed)
 
 % Options for adding complex noise
 % vtsmod = vtsmod+sin(45*(ft'+.3)).*abs(randn(length(vtsmod),1))*2.5e-7;
@@ -31,7 +31,7 @@ vts_curramp = abs(vtsmod)/vtspoly(1);
 
 % Amplitude Noise
 % Added sin wave with amplitude related to Freq, random phase shift
-curramp = vts_curramp+(sin(100*ft'+2*pi*rand).*((rand/8+ft')*.1));
+% curramp = vts_curramp+(sin(100*ft'+2*pi*rand).*((rand/8+ft')*.1));
 
 mod_phi = -angle(vtsmod); %Recovering the phase
 currphi = mod_phi*180/pi; %Convert from radians to degrees
