@@ -1,5 +1,5 @@
 %% Generating VTS Simulated Data
-cd(vtsdir);
+cd(vtsdir); %Directory of VTS
 startup();
 
 testdefault={'.01','1'};

@@ -95,7 +95,9 @@ if highfrqdata == 1
     ylabel('Phase (Degrees)');
     legend('Data','Recovered','Location','Best');
     hold off
+    
 else
+    
     save(strcat(testname,'.mat'),'mu','ft','mua','mus')
     figure
     subplot(2,1,1) %Plotting the "tissue" and optimized amplitude
@@ -114,4 +116,5 @@ else
     ylabel('Phase (Degrees)');
     legend('Data','Recovered','Location','Best');
     hold off
+    
 end

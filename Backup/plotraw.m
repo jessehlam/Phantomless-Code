@@ -10,16 +10,6 @@ xlabel('Frequency (MHz)');
 ylabel('Amplitude');
 legend('Raw "Tissue" Amplitude','Raw Calibrator Amplitude','location','best')
 
-% figure
-% plot(FDPM.F(1:334),FDPM.PHI(1:334),'b-');
-% hold on;
-% plot(FDPM.F(1:334),CAL.PHI(1:334),'r-');
-% title('Raw Phase');
-% xlabel('Frequency (MHz)');
-% ylabel('Phase');
-% legend('Raw "Tissue" Phase','Raw Calibrator Phase','location','best')
-
-
 if plotrawcal==1
     figure
     plot(FDPM.F(1:334),rawamp(1:334),'b*'); %Plotting the non-normalized amp

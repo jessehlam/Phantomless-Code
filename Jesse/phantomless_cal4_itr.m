@@ -1,5 +1,7 @@
 %dbstop if error;
 
+
+
 %% Pop ups
 %Add the VTS files to the MATLAB path
 
@@ -14,8 +16,8 @@ if exist('output','var')==1 && length(output)==4 && exist('pth','var')==1 && pth
     default={output{1},output{2},output{3},output{4}}; %Input previous values
 else %If fresh processing
     clearvars -except defaultdir
-    default={'20','95','4','690'}; %Default values displayed per box
-    pth=defaultdir;
+    default={'19','95','5','800'}; %Default values displayed per box
+    pth='\\128.200.57.212\Photon Portal\Data\data.phantomless';
 end
 
 %Measurement values
@@ -36,11 +38,12 @@ n_air = 1.0; %Index of refraction of air
 n_filter = 1.5; %Index of refraction of glass
 n = 1.43; %Index of refraction of sample
 c = 2.9979*10^11;   %mm/s in air
-freqstart=.05; %Instrument starting frequency (GHz)
-freqend=.8; %Instrument ending frequency (GHz)
+
+freqstart=.0003; %Instrument starting frequency (GHz)
+freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
-polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
+polyfrq=.20; %Frequency at which the polynomial fits the amplitude and phase up to
 vtsdir='C:\Users\Jesse\Phantomless-Code\VTS';
 
 %% Options
@@ -49,12 +52,13 @@ plotraws=1; %Plot the raw data?
     plotrawcal=1; %Plot the raw non-normalized, calibrated data?
 plotfit=1; %Plot the polynomial fits?
 highfrqdata=0; %Calibrate using high frequency data?
-simdat=1; %Use simulated, test data?
+simdat=0; %Use simulated, test data?
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
-calfreq=.6; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.005:.001:.02; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.5:.1:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+calfreq=.35; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
+mua=.007:.0001:.009; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.6:.001:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
 frqnum2=floor((calfreqstart-freqstart)/freqstep)+1; %The element number containing the calibration frequency, starting
@@ -95,6 +99,7 @@ end
 
 %Calibrating
 if simdat==1
+    cd(pth)
     calibration_sim %If using simulated data
 else
     calibration_itr %Calibrates out system response

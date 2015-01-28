@@ -24,9 +24,9 @@ if plots==1
     ylabel('Phase (Degrees)');
     xlabel('Frequency (Mhz)');
     
-if plotraws==1
-    plotraw;
-end
+    if plotraws==1
+        plotraw;
+    end
 
 end
 
