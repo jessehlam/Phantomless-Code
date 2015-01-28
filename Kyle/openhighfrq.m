@@ -7,6 +7,13 @@ calffile=importdata(strcat(pth,calfilef));
 calf.amp = calffile.data(:,3); %pulls amp of calibrator file
 calf.phi = calffile.data(:,2); %pulls phase of calibrator file
 
+highffile2=importdata(strcat(pth,samplef_file2));
+highf2.amp = highffile2.data(:,3); %pulls amp of "tissue" file
+highf2.phi = highffile2.data(:,2); %pulls phase of "tissue" file
+
+calffile2=importdata(strcat(pth,calfilef2));
+calf2.amp = calffile2.data(:,3); %pulls amp of calibrator file
+calf2.phi = calffile2.data(:,2); %pulls phase of calibrator file
 % [sampf, pthf, filterindexf] = uigetfile('*.asc','Select High Frequency Data Set','MultiSelect', 'on',pth);
 
 cd C:\Users\Kyle\Documents\GitHub\Phantomless-Code\phantoms; %Current dir should be the phantomless_cal3 folder

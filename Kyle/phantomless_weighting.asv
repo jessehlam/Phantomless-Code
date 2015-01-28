@@ -130,7 +130,7 @@ if highfrqdata == 1
     highfrq   
     
     % Noise Floor
-    plot_noiseFloor;
+%     plot_noiseFloor;
 end
 
 % % Noise Floor

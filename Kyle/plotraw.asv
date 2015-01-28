@@ -9,10 +9,9 @@ title('Raw Amplitudes');
 xlabel('Frequency (MHz)');
 ylabel('Amplitude');
 legend('Raw "Tissue" Amplitude','Raw Calibrator Amplitude','location','best')
-
 hold on
-plot(noiseFloor.f*1000,noiseFloor.amp,'c*')
-plot(highffile.data(1,1),mean(highf.amp),'g*','MarkerSize',20)
+plot(noiseFloor.f*1000,noiseFloor.amp)
+plot(highffile.data(1,1),highfavg.amp,'g*','MarkerSize',30),'g*')
 
 
 % figure
