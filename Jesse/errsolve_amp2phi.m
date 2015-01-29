@@ -8,7 +8,7 @@ mu=[0 0]; %Preparing empty matrix to hold optical properties
 muguess=zeros(10,2); %Preparing empty matrix to hold top 10 mua
 besttot=10; %How many mua/mus pairs to save?
 best=0; %Initializing the counter to save the 10 best mua/mus pair
-totalitr=length(mua)*length(mus)+besttot; %Total number of iterations (for the progress bar)
+totalitr=length(mua)*length(mus); %Total number of iterations (for the progress bar)
 h = waitbar(0,strcat('0/',num2str(totalitr))); %Opening progress bar
 
 for i=1:length(mua)
@@ -30,7 +30,7 @@ for i=1:length(mua)
             errtest=erramp+errfamp*num; %Weighting the higher frequency data
         else %Not including high frequency data
             erramp=sum(abs((curramp(frqnum2:frqnum)-curramp_itr(frqnum2:frqnum)))./curramp(frqnum2:frqnum)); %Amplitude error
-            errtest=erramp;             
+            errtest=erramp;    
         end
         
 %Saving top 10 optical properties
@@ -60,6 +60,7 @@ for i=1:length(mua)
     
 end
 
+
 for j = 1:length(muguess) %Now that we have our top 10 amplitude fits
     bestop=[muguess(j,:) 0.8 n]; %Of these, find the best phase fit
     vtsmod_itr = VtsSolvers.ROfRhoAndFt(bestop, rho, ft); %Solver type     
@@ -73,10 +74,15 @@ for j = 1:length(muguess) %Now that we have our top 10 amplitude fits
         mu=muguess(j,:);
     end
     
-    itr=itr+1; %Counter for iteration
     progress=itr/totalitr; %Updating progress so user doesn't think MATLAB froze
     progtxt=strcat(num2str(itr),'/',num2str(totalitr));
     waitbar(progress,h,sprintf(progtxt));
 end
 
-close(h) %Closing progress bar
+waitbar(progress,h,'Finalizing and writing to file...');
+
+if write2file ==1
+    writer
+end
+
+close(h)

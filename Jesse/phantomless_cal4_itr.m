@@ -54,11 +54,12 @@ plotfit=1; %Plot the polynomial fits?
 highfrqdata=0; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
 write2file=1; %Write results to file? (saved in same dir as this .m file)
+    writenote='50-1000mhz'; %Attach note to file
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
 calfreq=1; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.007:.001:.009; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.6:.1:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+mua=.005:.0001:.01; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.5:.001:1.5; %Range and resolution of MUs, based on typical physiological values for human tissue
 
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
@@ -117,9 +118,4 @@ model_lookup_itr2 %Attempts to recovers optical properties
 % Plotting
 if simdat==0
     plotter %Comment out if using simulated data
-end
-
-% Write data to file
-if write2file ==1
-    writer
 end
