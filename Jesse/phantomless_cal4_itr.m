@@ -44,7 +44,7 @@ freqend=.35; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.20; %Frequency at which the polynomial fits the amplitude and phase up to
-vtsdir='C:\Users\Jesse\Phantomless-Code\VTS';
+vtsdir='C:\Users\Jesse\Desktop\Phantomless-Code\VTS';
 
 %% Options
 plots=1; %Turns plotting on or off

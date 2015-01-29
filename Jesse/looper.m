@@ -1,0 +1,10 @@
+diode='660nm';
+averager
+diode='690nm';
+averager
+diode='779nm';
+averager
+diode='800nm';
+averager
+diode='830nm';
+averager
