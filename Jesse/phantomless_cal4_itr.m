@@ -16,7 +16,7 @@ if exist('output','var')==1 && length(output)==4 && exist('pth','var')==1 && pth
     default={output{1},output{2},output{3},output{4}}; %Input previous values
 else %If fresh processing
     clearvars -except defaultdir
-    default={'19','95','5','800'}; %Default values displayed per box
+    default={'23','96','5','800'}; %Default values displayed per box
     pth='\\128.200.57.212\Photon Portal\Data\data.phantomless';
 end
 
@@ -39,8 +39,8 @@ n_filter = 1.5; %Index of refraction of glass
 n = 1.43; %Index of refraction of sample
 c = 2.9979*10^11;   %mm/s in air
 
-freqstart=.0003; %Instrument starting frequency (GHz)
-freqend=.35; %Instrument ending frequency (GHz)
+freqstart=.05; %Instrument starting frequency (GHz)
+freqend=1; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
 polyfrq=.20; %Frequency at which the polynomial fits the amplitude and phase up to
@@ -53,11 +53,12 @@ plotraws=1; %Plot the raw data?
 plotfit=1; %Plot the polynomial fits?
 highfrqdata=0; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
+write2file=1; %Write results to file? (saved in same dir as this .m file)
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
-calfreq=.35; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.007:.0001:.009; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.6:.001:1; %Range and resolution of MUs, based on typical physiological values for human tissue
+calfreq=1; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
+mua=.007:.001:.009; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.6:.1:1; %Range and resolution of MUs, based on typical physiological values for human tissue
 
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
@@ -68,7 +69,7 @@ ft = linspace(freqstart,freqend,num); %Frequency set
 
 %% Selecting the sorting the tissue and calibrator measurements
 if simdat==0
-    [samp, pth, filterindex] = uigetfile('*.asc','Select Both Sample and Calibration Files','MultiSelect', 'on',pth);
+    [samp, pth, filterindex] = uigetfile({'*.xls';'*.asc'},'Select Both Sample and Calibration Files','MultiSelect', 'on',pth);
     if filterindex==0;
         error('Invalid File Selection')
     end
@@ -113,7 +114,12 @@ end
 %Recover optical properties
 model_lookup_itr2 %Attempts to recovers optical properties
 
-%% Plotting
+% Plotting
 if simdat==0
     plotter %Comment out if using simulated data
+end
+
+% Write data to file
+if write2file ==1
+    writer
 end

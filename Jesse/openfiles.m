@@ -1,11 +1,12 @@
 %% Importing sample and calibrator data
 cd(pth)
 %%Opens the "tissue" measurement
-FDPM=importdata(strcat(pth,sample_file)); %sample file (i.e. the phantom)
-FDPM.F = FDPM.data(:,1); %Pulls the frequency range
+FDPM=xlsread(strcat(pth,sample_file)); %sample file (i.e. the phantom)
+FDPM.F = FDPM(:,1); %Pulls the frequency range
 
-numdiode=size(FDPM.data); %Detects number of diodes used
-numdiode=(numdiode(:,2)-1)/2;
+% numdiode=size(FDPM.data); %Detects number of diodes used
+% numdiode=(numdiode(:,2)-1)/2;
+numdiode=1;
 
 if numdiode > 1 %If more than 1 diode detected (doesn't quite work yet)
     waitfor(msgbox('Multidiode detected. Enter diode number to calibrate'));
@@ -18,11 +19,11 @@ if numdiode > 1 %If more than 1 diode detected (doesn't quite work yet)
     FDPM.PHI = FDPM.data(:,2*diode); %amp of sample file
     FDPM.AMP = FDPM.data(:,1+2*diode); %phase of sample file
 else
-    FDPM.PHI = FDPM.data(:,2); %pulls amp of sample file
-    FDPM.AMP = FDPM.data(:,3); %pulls phase of sample file
+    FDPM.PHI = FDPM(:,2); %pulls phase of sample file
+    FDPM.AMP = FDPM(:,3); %pulls amp of sample file
 end
 
 %% Opens the "calibrator" file
-CAL=importdata(strcat(pth,calfile));
-CAL.AMP = CAL.data(:,3); %pulls amp of cal file
-CAL.PHI = CAL.data(:,2); %pulls phase of cal file
+CAL=xlsread(strcat(pth,calfile));
+CAL.PHI = CAL(:,2); %pulls phase of cal file
+CAL.AMP = CAL(:,3); %pulls amp of cal file

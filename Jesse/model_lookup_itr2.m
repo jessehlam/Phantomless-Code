@@ -1,8 +1,3 @@
-%Triple commented lines are used for generating test data
-%ACRIN7 @690	0.016521307	0.826354605
-%INO5 @690	0.008723295	0.793225574
-%INO5 @778  0.009314095	0.801617501
-
 errsolve_amp2phi
 
 % Run the model to get the final amplitude and phase as well as model prediction
