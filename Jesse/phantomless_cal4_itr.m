@@ -53,6 +53,7 @@ highfrqdata=0; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
 write2file=1; %Write results to file? (saved in same dir as this .m file)
     writenote='50-1000mhz'; %Attach note to file
+amp_first=1; %prioritize amplitude or phase?
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
 calfreq=1; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.

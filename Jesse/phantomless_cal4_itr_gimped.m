@@ -1,8 +1,7 @@
 defaultdir=pwd;
+pth='\\128.200.57.212\Photon Portal\Data\data.phantomless\150128\';
 rho=23; %Rho on phantom
 L_cal=96; %Rho in calibrator
-L_filter=7.18; %Length of GLASS in calibrator
-diode=830; %Wavelength used
 n_air = 1.0; %Index of refraction of air
 n_filter = 1.5; %Index of refraction of glass
 n = 1.43; %Index of refraction of sample
@@ -11,7 +10,7 @@ freqstart=.05; %Instrument starting frequency (GHz)
 freqend=1; %Instrument ending frequency (GHz)
 num=401; %Number of data points
 polyN=2; %Order of the polynomial that is fit to the amplitude and phase (for normalization)
-polyfrq=.20; %Frequency at which the polynomial fits the amplitude and phase up to
+polyfrq=.25; %Frequency at which the polynomial fits the amplitude and phase up to
 vtsdir='C:\Users\Jesse\Desktop\Phantomless-Code\VTS';
 plots=0; %Turns plotting on or off
 plotraws=1; %Plot the raw data?
@@ -21,8 +20,9 @@ highfrqdata=0; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
 write2file=1; %Write results to file? (saved in same dir as this .m file)
 
-mua=.005:.0001:.01; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.5:.001:1.5; %Range and resolution of MUs, based on typical physiological values for human tissue
+mua=.001:.001:.02; %Range and resolution of MUa
+mus=.8:.001:1.3; %Range and resolution of MUs
+
 freqstep=(freqend-freqstart)/num; %The step size in GHz
 frqnum2=floor((calfreqstart-freqstart)/freqstep)+1; %The element number containing the calibration frequency, starting
 frqnum=floor((calfreq-freqstart)/freqstep); %The element number containing the calibration frequency, ending
