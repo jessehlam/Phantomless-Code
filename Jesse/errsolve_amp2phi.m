@@ -9,7 +9,7 @@ muguess=zeros(10,2); %Preparing empty matrix to hold top 10 mua
 besttot=10; %How many mua/mus pairs to save?
 best=0; %Initializing the counter to save the 10 best mua/mus pair
 totalitr=length(mua)*length(mus); %Total number of iterations (for the progress bar)
-h = waitbar(0,strcat('0/',num2str(totalitr))); %Opening progress bar
+waitb = waitbar(0,strcat('0/',num2str(totalitr))); %Opening progress bar
 
 for i=1:length(mua)
         
@@ -55,17 +55,25 @@ for i=1:length(mua)
         itr=itr+1; %Counter for iteration
         progress=itr/totalitr; %Updating progress so user doesn't think MATLAB froze
         progtxt=strcat(num2str(itr),'/',num2str(totalitr));
-        waitbar(progress,h,sprintf(progtxt));
+        waitbar(progress,waitb,sprintf(progtxt));
     end
     
 end
-
 
 for j = 1:length(muguess) %Now that we have our top 10 amplitude fits
     bestop=[muguess(j,:) 0.8 n]; %Of these, find the best phase fit
     vtsmod_itr = VtsSolvers.ROfRhoAndFt(bestop, rho, ft); %Solver type     
     mod_phi_itr = -angle(vtsmod_itr); %Recovering the phase
     currphi_itr = mod_phi_itr*180/pi; %Convert from radians to degrees
+    wrapper=sign(currphi_itr);
+    
+    for p=1:length(wrapper);
+        wraptest=wrapper(p);
+        if wraptest==-1
+            currphi_itr(p)=currphi_itr(p)+360;
+        end
+    end
+    
     currphi_itr = currphi_itr-currphi_itr(frqnum2); %Normalizing the phase
     errphitest=sum(abs((currphi(frqnum2:frqnum)-currphi_itr(frqnum2:frqnum)))./currphi(frqnum2:frqnum)); %Phase error
     
@@ -76,13 +84,7 @@ for j = 1:length(muguess) %Now that we have our top 10 amplitude fits
     
     progress=itr/totalitr; %Updating progress so user doesn't think MATLAB froze
     progtxt=strcat(num2str(itr),'/',num2str(totalitr));
-    waitbar(progress,h,sprintf(progtxt));
+    waitbar(progress,waitb,sprintf(progtxt));
 end
 
-waitbar(progress,h,'Finalizing and writing to file...');
-
-if write2file ==1
-    writer
-end
-
-close(h)
+waitbar(progress,waitb,'Finalizing...');

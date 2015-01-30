@@ -1,7 +1,5 @@
 %dbstop if error;
 
-
-
 %% Pop ups
 %Add the VTS files to the MATLAB path
 
@@ -58,8 +56,8 @@ write2file=1; %Write results to file? (saved in same dir as this .m file)
 
 calfreqstart=.05; %Frequency of interest, starting (Ghz). Cannot be less than instrument frequency.
 calfreq=1; %Frequency of interest, ending (Ghz). Cannot be more than instrument frequency.
-mua=.005:.0001:.01; %Range and resolution of MUa, based on typical physiological values for human tissue
-mus=.5:.001:1.5; %Range and resolution of MUs, based on typical physiological values for human tissue
+mua=.005:.001:.01; %Range and resolution of MUa, based on typical physiological values for human tissue
+mus=.5:.1:1.5; %Range and resolution of MUs, based on typical physiological values for human tissue
 
 %% Some calculations
 freqstep=(freqend-freqstart)/num; %The step size in GHz
