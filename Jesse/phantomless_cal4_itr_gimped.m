@@ -20,7 +20,7 @@ highfrqdata=0; %Calibrate using high frequency data?
 simdat=0; %Use simulated, test data?
 write2file=1; %Write results to file? (saved in same dir as this .m file)
 
-mua=.001:.001:.02; %Range and resolution of MUa
+mua=.001:.0001:.015; %Range and resolution of MUa
 mus=.8:.001:1.3; %Range and resolution of MUs
 
 freqstep=(freqend-freqstart)/num; %The step size in GHz
