@@ -2,15 +2,15 @@
 % Phantomless Fit test script
 clear
 clc
-dataPath = 'C:\Users\Kyle\Documents\GitHub\150130\830';
+dataPath = 'C:\Users\Kyle\Documents\GitHub\150202\150202\ACRIN2';
 for testnum = 1:10;
-    for wavelength = 830 
+    for wavelength = 778 
 cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle')
-rhoPhantom = 23;
+rhoPhantom = 17.5;
 rhoSetup = 95;
 glassThick = 5;
-caldataname = strcat(num2str(wavelength),'PH010_18MM_50-1000MHZ_MATCH.xls');
-dataname = strcat(num2str(wavelength),'PH010_18MM_50-1000MHZ.xls');
+caldataname = strcat(num2str(wavelength),'ACRIN2_19MM_50-1000MHZ_MATCH.xls');
+dataname = strcat(num2str(wavelength),'ACRIN2_19MM_50-1000MHZ.xls');
 dataFreqRange = [.05 1];
 % fitFreqRange = [.05,1];
 % muaRange = [.005 .015 ];
@@ -26,7 +26,7 @@ fitFreqRange = [.05,1-(testnum-1)*.05];
 [fitFreqRange,muaPredict,musPredict,ampPredict,phasePredict,freqset,dataAmp,dataPhi] = phantomlessFit( rhoPhantom, rhoSetup, glassThick, ...
     wavelength, dataPath,dataname,caldataname,dataFreqRange,fitFreqRange,muaRange,muaRes,musRange,musRes );
 cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle')
-save(strcat('test2',num2str(testnum),'wavelength',num2str(wavelength)))
+save(strcat('test4',num2str(testnum),'wavelength',num2str(wavelength)))
     end
 end
 

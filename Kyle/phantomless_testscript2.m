@@ -6,7 +6,7 @@ dataPath = 'C:\Users\Kyle\Documents\GitHub\150130\830';
 for testnum = 1:11;
     for wavelength = 830 
 cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle')
-rhoPhantom = 19;
+rhoPhantom = 18;
 rhoSetup = 95;
 glassThick = 5;
 caldataname = strcat(num2str(wavelength),'PH010_18MM_50-1000MHZ_MATCH.xls');
