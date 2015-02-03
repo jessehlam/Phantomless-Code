@@ -3,10 +3,10 @@
 clear
 clc
 dataPath = 'C:\Users\Kyle\Documents\GitHub\150130\830';
-for testnum = 1%:10;
+for testnum = 1:11;
     for wavelength = 830 
 cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle')
-rhoPhantom = 23;
+rhoPhantom = 19;
 rhoSetup = 95;
 glassThick = 5;
 caldataname = strcat(num2str(wavelength),'PH010_18MM_50-1000MHZ_MATCH.xls');
@@ -19,14 +19,14 @@ dataFreqRange = [.05 1];
 % musRes = .01;
 muaRange = [.005 .02 ];
 musRange = [.5 1.3 ];
-muaRes = .0002;
+muaRes = .0001;
 musRes = .005;
 
 fitFreqRange = [.05,1-(testnum-1)*.05];
 [fitFreqRange,muaPredict,musPredict,ampPredict,phasePredict,freqset,dataAmp,dataPhi] = phantomlessFit( rhoPhantom, rhoSetup, glassThick, ...
     wavelength, dataPath,dataname,caldataname,dataFreqRange,fitFreqRange,muaRange,muaRes,musRange,musRes );
 cd('C:\Users\Kyle\Documents\GitHub\Phantomless-Code\Kyle')
-save(strcat('test2',num2str(testnum),'wavelength',num2str(wavelength)))
+save(strcat('test3',num2str(testnum),'wavelength',num2str(wavelength)))
     end
 end
 
