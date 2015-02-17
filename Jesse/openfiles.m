@@ -1,7 +1,9 @@
 %% Importing sample and calibrator data
 cd(pth)
 %%Opens the "tissue" measurement
-tissue_dat=xlsread(strcat(pth,sample_file)); %sample file (i.e. the phantom)
+%tissue_dat=xlsread(strcat(pth,sample_file)); %sample file (i.e. the phantom)
+tissue_dat=importdata(strcat(pth,sample_file)); %sample file (i.e. the phantom)
+tissue_dat=tissue_dat.data;
 FDPM.F = tissue_dat(:,1); %Pulls the frequency range
 
 % numdiode=size(FDPM.data); %Detects number of diodes used
@@ -24,6 +26,8 @@ numdiode=1;
 % end
 
 %% Opens the "calibrator" file
-CAL_dat=xlsread(strcat(pth,calfile));
+%CAL_dat=xlsread(strcat(pth,calfile));
+CAL_dat=importdata(strcat(pth,calfile));
+CAL_dat=CAL_dat.data;
 CAL.PHI = CAL_dat(:,2); %pulls phase of cal file
 CAL.AMP = CAL_dat(:,3); %pulls amp of cal file

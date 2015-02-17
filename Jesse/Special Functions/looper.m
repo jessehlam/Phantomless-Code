@@ -1,10 +1,10 @@
-diode='660nm';
+% diode='660';
+% averager
+% diode='690';
+% averager
+% diode='778';
+% averager
+diode='800';
 averager
-diode='690nm';
-averager
-diode='779nm';
-averager
-diode='800nm';
-averager
-diode='830nm';
-averager
+% diode='830';
+% averager
