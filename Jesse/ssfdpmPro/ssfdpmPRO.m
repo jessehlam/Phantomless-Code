@@ -8,9 +8,9 @@ function error = ssfdpmPRO(fdpm,spec,physio, bw, pro)
 %need to preallocate variables
 %loop over files but only run cals once and setups once
 error=0;
-initFilenames
-initVariables
-initVP
+initFilenames %Reconstructs file names and prepares/creates directories
+initVariables %Reads dosiguiscript settings and checks for errors 
+initVP %Initializes the virtual photonics MATLAB addon
 if error==1; return; end
 for j=1:nFiles
     if pro.verbose
@@ -19,15 +19,36 @@ for j=1:nFiles
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% FDPM FIT
     if ((j==1)||(fdpm.cal.which==3))
-       fdpmcal = getFDPMCal(fdpm.cal, fdpm.diodes, fdpm.stderr, fdpm.boundary_option,char(fdpm.files(:,j)));
+       fdpmcal = getFDPMCal(fdpm.cal, fdpm.diodes, fdpm.stderr, fdpm.boundary_option,char(fdpm.files(:,j)),fdpm.glass);
+       %Derives out the system response from the phantom:
+           %Looks up phantom file and its "known" optical properties
+           %Runs the model for the phantom amplitude/phase
+           %Calibrates the phantom measurement using the phantom amp/phase to
+                %get the system response
+           %In the phantomless calibrator, the signal from the calibrator
+                %is assumed to be the system response. As such, we only
+                %then need to correct the phase shift using the photon pathlength through air
+                %and glass materials in the system.
+        
        if fdpmcal.error~=0, error=1; return; end
     end 
+    
     fdpm.opt.itr=j;
     final(j) = initFDPM(fdpm, fdpmcal,char(fdpm.files(:,j))); % opens fdpm files, does calibration, windows to frequency range and filters phase jumps
+    %Derives the tissue optical properties using the system response:
+        %Reads the tissue measurement file
+        %Calibrates the tissue response using the system reponse (derived
+            %from the phantom)
+        %Fixes the frequency range to the one the user specified
+    
     fdpmfit(j) = fitFDPM(fdpm.diodes, final(j).freq, final(j).AC, final(j).damp, final(j).phase, final(j).dphi, fdpm.model_to_fit, fdpm.opt, pro.verbose, fdpm.n, final(j).dist, fdpm.boundary_option);
-    if pro.graphing==1
-        plotMu(final(j), fdpmfit(j), fdpm.diodes,pro.prefixes{j},1,pro);
-    end
+    %Normalizes the calibrated data, finds the best fitting model by
+        %chi-squared minimization, and fits the scattering curve using the
+        %power law
+    
+    plotMu(final(j), fdpmfit(j), fdpm.diodes,pro.prefixes{j},1,pro);
+    %Plots the calibrated data and best fitting amplitude/phase
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% SPEC FIT
     if spec.on

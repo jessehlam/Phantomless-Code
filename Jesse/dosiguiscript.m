@@ -5,7 +5,12 @@ clear physio
 clear p
 global guiVal;
 
-
+plotraw=1; %Plot raw data?
+warning('off'); %Keep off or lots of orange text
+rho=17.5; %S-D separation
+fdpm.glass=5.2; %Length of glass in calibrator
+yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse';
+cd(yourDIR);
 
 %% FDPM Calibration Settings
 fdpm.cal.which = 1;   
@@ -35,7 +40,7 @@ fdpm.cal.model_to_fit =	'p1seminf';
 % can be found in ssfdpmPro\models
 % used in getFDPMCal.m
 
-fdpm.cal.rfixed = 0;  
+fdpm.cal.rfixed = rho;  
 % source-detector separation (mm) used to measure phantom
 % if set to 0, program reads s-d separation from phantom measurement file
 % otherwise file s-d will be ignored and this number used
@@ -86,14 +91,22 @@ fdpm.stderr=[0.03, 0.3];
 % calculated
 % used when reading in fdpm files averageFDPMDataAtDiodes.m
 
-fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
+
+freqcalc %Calculates the starting  and ending frequency
+fdpm.up=numup; %Starting frequency (cuts off the non-linear region of the amplitude)
+fdpm.down=numdown; %Ending frequency (cuts off amplitude that dips into the noise floor)
+%Calculate the usable frequency range
+
+fdpm.freqrange = [50; down];
+% fdpm.freqrange = [up; down]; 
+% fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
 % frequency range to use in fdpm fitting
 % all measured frequencies can be used but smaller frequency sets are
 % sometimes required when data is noisy
 % windowing the frequency results in windowing of the amplitude and phase
 % arrays
 
-fdpm.opt.rfixed = 17.5;
+fdpm.opt.rfixed = rho;
 % source-detector separation (mm) used during measurement
 % if set to 0, program reads s-d separation from measurement file
 % otherwise file s-d will be ignored and this number used
@@ -138,12 +151,12 @@ fdpm.opt.chisqok = 0;
 % fitFDPM.m -> mufit.m
 
 %% Physio Fit Settings
-physio.fdpm.fit = guiVal.doPhysioFdpmFit;    
+physio.fdpm.fit = 0;    
 % bool
 % fit phsyio from fdpm wavelengths?
 % in some cases we are only interested in fitting for optical properties
 
-physio.spec.fit = guiVal.doPhysioSpecFit;    
+physio.spec.fit = 0;    
 % bool
 % fit physio from spec?
 % in some cases we are only interested in fitting for optical properties
@@ -205,7 +218,7 @@ bw.peak_guess = 973;  %water peak location at 35 C
 bw.refwl = 935;  
 
 %% Spec Settings
-spec.on=guiVal.doSpecFit;
+spec.on=0;
 % bool
 % do broadband fit after fdpm fit? 
 % many times we do fdpm only studies or have circumstances in which we want
@@ -229,7 +242,7 @@ spec.dark = {};
 % legacy variables used before we saved broadband data with the dark
 % already subtracted
 
-spec.opt.rfixed=0;
+spec.opt.rfixed=rho;
 % source-detector separation (mm) used during broadband measurement
 % if set to 0, program reads s-d separation from measurement file
 % otherwise file s-d will be ignored and this number used
@@ -295,10 +308,10 @@ p.verbose = 1;
 p.graphing = 1;
 % turns on graphing during processing
 
-p.savefitgraphs=1;
+p.savefitgraphs=0;
 % saves graphs to file
 
-p.fileWrite=1;
+p.fileWrite=0;
 % saves output files
 
 p.gridimager=0;
@@ -306,21 +319,11 @@ p.gridimager=0;
 
 %%Run Processing
 error = ssfdpmPRO(fdpm,spec,physio,bw,p);
-save(p.outLabel,'fdpm','spec','physio','bw','p');
 
-% newly added code for running grid imager module
-% not yet used
-if(p.gridimager)
-    try
-        giscript_ssfdpmpro(p,'L');
-    catch ME
-        disp('error with left side');
-    end
-    try
-        giscript_ssfdpmpro(p,'R');
-    catch ME
-        disp('error with right side');
-    end
+if plotraw==1;
+    rawplot
 end
 
+cd(yourDIR);
 
+% save(p.outLabel,'fdpm','spec','physio','bw','p');

@@ -1,10 +1,9 @@
-function cal=getFDPMCal(fdpmcal, diodes_selected, stderr, reff_option, file)
-%%%byh Calculates instrument response using measurement on phantom of known optical properties 
+function cal=getFDPMCal(fdpmcal, diodes_selected, stderr, reff_option, file,glass)
+%%%byh Calculates instrument response using measurement on phantom of "known" optical properties
+%Nested functions:
+    %averageFDPMDataAtDiodes - averages data
+        %readFDPMDataAtDiodes - opens and reads data
 
-% which_cal: 0 uncalibrated; 1 off phantom; 2 is 2 distance
-% calibration files need to be in path, will probably need to specify
-% location at some point. . 2 distance not coded yet.
-% phantom name must not have dash
 % OUTPUT:
 % cal.error
 % cal.dist
@@ -13,25 +12,24 @@ function cal=getFDPMCal(fdpmcal, diodes_selected, stderr, reff_option, file)
 % cal.phase
 % cal.phsd_sqd
 
-
-
+%Initializing variables
 which_cal=fdpmcal.which;
-phantoms=fdpmcal.phantoms;
+phantoms=fdpmcal.phantoms; %Phantom names
 rfixed=fdpmcal.rfixed;
-n=fdpmcal.n;
+n=fdpmcal.n; %Index of refraction
 model=fdpmcal.model_to_fit;
 phantomdir=fdpmcal.phantomdir;
 
-if(strcmp(model,'vpSDA'))
-    VtsSolvers.SetSolverType('PointSourceSDA');
-    model='vpRofRhoandFt';
-elseif(strcmp(model,'vpMCBasic'))
-    VtsSolvers.SetSolverType('MonteCarlo');
-    model='vpRofRhoandFt';
-elseif(strcmp(model,'vpMCNurbs'));
-    VtsSolvers.SetSolverType('Nurbs');
-    model='vpRofRhoandFt';
-end
+% if(strcmp(model,'vpSDA'))
+%     VtsSolvers.SetSolverType('PointSourceSDA');
+%     model='vpRofRhoandFt';
+% elseif(strcmp(model,'vpMCBasic'))
+%     VtsSolvers.SetSolverType('MonteCarlo');
+%     model='vpRofRhoandFt';
+% elseif(strcmp(model,'vpMCNurbs'));
+%     VtsSolvers.SetSolverType('Nurbs');
+%     model='vpRofRhoandFt';
+% end
 
 %%%byh off phantom is standard calibration method, other methods in this
 %%%file will be ignored
@@ -107,16 +105,18 @@ if which_cal==1     %% OFF PHANTOM
         %%%measured amplitude is divided by the theoretical amplitude.  The
         %%%result is the instrument response that can then be used to
         %%%calibrate the measurement files
-        L_cal = 95;
-        L_filter = 4.66;
-        c = 2.9979e11;
-        n_air = 1;
-        n_filter = 1.5;
         
-        cal.phase_offset = 360*refdat.freq*10^6*((L_cal-L_filter)/c/n_air+L_filter/c/n_filter);
+        %%%jhl Phantomless calibration parameters. The phase is to be
+        %%%corrected by the photon pathlength through air and glass
+        L_cal = 99; %Total pathlength in the calibrator (mm). Every mm of air @400Mhz is .48 degrees
+        L_filter = glass; %Total length of glass in the calibrator (mm). Every mm of glass @400Mhz is .32 degrees
+        c = 2.9979e11; %Speed of light (mm/s)
+        n_air = 1; %Index of refraction of free space
+        n_filter = 1.5; %Index of refraction of glass
+       
+        cal.phase_offset = 360*refdat.freq*10^6*((L_cal-L_filter)/c/n_air+L_filter/c/n_filter); %Total hase offset through the calibrator
         cal.phase(:,a) =refdat.phase(:,a) - deg2rad(cal.phase_offset);% - PHI_phan; %Correct phase through air and glass   		
-%         cal.phase(:,a) = cal.phase(:,a)-cal.phase(1,a);
-        cal.AC(:,a)   =refdat.AC(:,a);%./ AC_phan;
+        cal.AC(:,a)   =refdat.AC(:,a); %No need to correct for phantom optical properties since calibrator measurement IS the system response
         deriv_phan=dfdp(model,refdat.freq,theory, [pmua(a),pmus(a)],.0001*ones(2,1),0,n,cal.dist,0,noWt,0, reff_option);
         dACdmua=deriv_phan(1:nFreq,1);				%derivative of Re with respect to mua
         dPHIdmua=deriv_phan(1+nFreq:2*nFreq,1); %radians
@@ -170,7 +170,7 @@ elseif which_cal==3  % calibrate against multiple phantoms and select the closes
     end
     
     nFreq=length(mrefdat{1}.freq);         	%find number of data points
-    noWt = ones(nFreq*2,1);
+    noWt = ones(nFreq*2,1); %Any weighting?
         
     if rfixed==0
         cal.dist=mrefdat{1}.dist;

@@ -24,7 +24,8 @@ function varargout = dosigui(varargin)
 
 % Last Modified by GUIDE v2.5 12-May-2014 11:23:33
 
-% Begin initialization code - DO NOT EDIT
+% Begin initialization code - DO NOT EDIT. no -Jesse
+warning('off');
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -68,7 +69,7 @@ guiVal.sphereList={};
 % Add ssfdpmPro to path (and warn if already in there)
 current_path = path;
 if ~isempty(strfind(current_path,'ssfdpmPro'))
-    uiwait(msgbox('WARNING: ssfdpmPRO is already in the MATLAB path. You should check that it matches the expected version.','Check Path','modal'));
+%     uiwait(msgbox('WARNING: ssfdpmPRO is already in the MATLAB path. You should check that it matches the expected version.','Check Path','modal'));
 end
 pathroot=which('dosigui.m');
 pathroot=pathroot(1:end-9);

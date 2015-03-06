@@ -1,6 +1,10 @@
 function fdpmfit = fitFDPM(diodes, freq, amp, damp, phi, dphi, model_to_fit, options, verbose, n, dist, reff_option)
 %%%byh mufit.m has the actual fdpm fit.  
 
+% Nested functions
+    % mufit - Fits the model to the data using chi-squared minimization and runs the final model output for the best fitting curve.
+        % fdpmFitScat - If we have more than 1 diode, attempts to fit the scattering curve using the power law
+
 if(strcmp(model_to_fit,'vpSDA'))
     VtsSolvers.SetSolverType('PointSourceSDA');
     model_to_fit='vpRofRhoandFt';
@@ -31,9 +35,11 @@ if options.imagfit==1
     DATA = [amp.*cosphi; amp.*sinphi]; %[real; imag]
 else
     %DATA = [amp; phi];
-%     DATA=[amp./amp(1);phi];
-%     DATA=[amp./mean(amp(1:5));phi];
-      ampfit = polyfit(freq(1:20),amp(1:20),2);
+
+    %Normalizes the calibrated data by fitting a polynomial to the first 40
+    %frequencies then dividing everything by the first point of that
+    %polynomial
+      ampfit = polyfit(freq(1:40),amp(1:40),2);
       ampoly = polyval(ampfit,freq);  
 %       DATA=[10*(amp./ampoly(1));phi];
       DATA=[(amp./ampoly(1));phi];

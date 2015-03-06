@@ -23,19 +23,19 @@ for i=1:length(pro.files)
         pro.prefixes{i} = pro.files{i};
     end
 end
-outdir = ['PROCESSED\' pro.patientID '_' pro.date '\' ];
-pro.processed_dir = [pro.rootdir '\' outdir];
-try
-    cd(pro.processed_dir);
-catch 
-    mkdir(pro.processed_dir);
-end
-pro.fitbase = sprintf('%s%s_',pro.processed_dir,pro.outLabel);
-if pro.savefitgraphs==1;
-    fitgraph_dir=[pro.processed_dir '\recon graphs'];
-    try
-        cd(fitgraph_dir);
-    catch
-        mkdir(fitgraph_dir);
-    end
-end
+% outdir = ['PROCESSED\' pro.patientID '_' pro.date '\' ];
+% pro.processed_dir = [pro.rootdir '\' outdir];
+% try
+%     cd(pro.processed_dir);
+% catch 
+%     mkdir(pro.processed_dir);
+% end
+% pro.fitbase = sprintf('%s%s_',pro.processed_dir,pro.outLabel);
+% if pro.savefitgraphs==1;
+%     fitgraph_dir=[pro.processed_dir '\recon graphs'];
+%     try
+%         cd(fitgraph_dir);
+%     catch
+%         mkdir(fitgraph_dir);
+%     end
+% end

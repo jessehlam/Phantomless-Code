@@ -2,6 +2,12 @@ function final = initFDPM(fdpm, cal, files)
 %%%byh This function mainly opens the measurement files and removes the
 %%%instrument response
 
+% Nested functions:
+    % averageFDPMDataAtDiodes - opens files
+    % calibrateFDPM - calibrates the amplitude and phase. Also fixes the
+        % frequency window to the one the user specified
+    % setFreqRangeJumpsDistance - fixes phase jumps
+
 %   Output:
 %   final.AC
 %   final.phase
