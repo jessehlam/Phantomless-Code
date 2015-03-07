@@ -9,8 +9,10 @@ plotraw=1; %Plot raw data?
 warning('off'); %Keep off or lots of orange text
 rho=17.5; %S-D separation
 fdpm.glass=5.2; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse';
-cd(yourDIR);
+yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
+
+%Looks for phantom file in "separate_base_list_filter" line 38 <----
+%i.e. Add your calibration file's naming scheme here
 
 %% FDPM Calibration Settings
 fdpm.cal.which = 1;   
@@ -325,5 +327,7 @@ if plotraw==1;
 end
 
 cd(yourDIR);
+%For some reason, program changes directory to where the data is. This will
+%force it to go back to your own directory.
 
 % save(p.outLabel,'fdpm','spec','physio','bw','p');

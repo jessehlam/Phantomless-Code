@@ -1,5 +1,7 @@
 dataloc=strcat(guiVal.dataDir,guiVal.patientID,'\',guiVal.date,'\'); %Getting location of dark file
-darkimport=importdata(strcat(dataloc,'DARK-dcswitch.asc')); %Reconstructing location of dark file
+darkdir=dir(strcat(dataloc,'*DARK*'));
+darkname=darkdir.name;
+darkimport=importdata(strcat(dataloc,darkname)); %Reconstructing location of dark file
 msmtimport=importdata(strcat(dataloc,guiVal.prefixList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 phanimport=importdata(strcat(dataloc,guiVal.phantomList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 freq=darkimport.data(:,1); %Importing frequency range
