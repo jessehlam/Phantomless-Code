@@ -7,10 +7,12 @@ global guiVal;
 
 plotraw=1; %Plot raw data?
 warning('off'); %Keep off or lots of orange text
-rho=17.5; %S-D separation
+rho=23.5; %S-D separation
 fdpm.glass=5.2; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
-
+yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
+fdpm.diodes = [798]; %[657 689 779 798 829] I somehow broke auto diode checking...
+smartfreq=1;
+    
 %Looks for phantom file in "separate_base_list_filter" line 38 <----
 %i.e. Add your calibration file's naming scheme here
 
@@ -62,8 +64,8 @@ fdpm.source=guiVal.source;
 % the source file extension is indicative of the instrumentation used in
 % the measurement
 
-%fdpm.diodes = [660 690 785 830]; 
-fdpm.diodes = guiVal.fdpm_diodes;
+% fdpm.diodes = [779]; 
+% fdpm.diodes = guiVal.fdpm_diodes;
 % diode wavelengths to use for fdpm processing 
 % must match wavelengths in measurement files
 % in some cases with noisy data, diodes can be taken out to improve the
@@ -95,12 +97,17 @@ fdpm.stderr=[0.03, 0.3];
 
 
 freqcalc %Calculates the starting  and ending frequency
-fdpm.up=numup; %Starting frequency (cuts off the non-linear region of the amplitude)
-fdpm.down=numdown; %Ending frequency (cuts off amplitude that dips into the noise floor)
+% fdpm.up=numup; %Starting frequency (cuts off the non-linear region of the amplitude)
+% fdpm.down=numdown; %Ending frequency (cuts off amplitude that dips into the noise floor)
 %Calculate the usable frequency range
 
-fdpm.freqrange = [50; down];
-% fdpm.freqrange = [up; down]; 
+% fdpm.freqrange = [50; 350];
+if smartfreq==1;
+    fdpm.freqrange = [50; down];
+else
+    fdpm.freqrange = [50; 400];
+end
+
 % fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
 % frequency range to use in fdpm fitting
 % all measured frequencies can be used but smaller frequency sets are

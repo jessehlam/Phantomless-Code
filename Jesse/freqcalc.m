@@ -1,19 +1,25 @@
 dataloc=strcat(guiVal.dataDir,guiVal.patientID,'\',guiVal.date,'\'); %Getting location of dark file
-darkdir=dir(strcat(dataloc,'*DARK*'));
-darkname=darkdir.name;
-darkimport=importdata(strcat(dataloc,darkname)); %Reconstructing location of dark file
+
+% darkdir=dir(strcat(dataloc,'*DARK*'));
+% darkname=darkdir.name;
+darkdir=guiVal.prefixList;
+darkname=darkdir{1};
+darkimport=importdata(strcat(dataloc,darkname(1:3),'-DARK-dcswitch.asc')); %Reconstructing location of dark file
 msmtimport=importdata(strcat(dataloc,guiVal.prefixList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 phanimport=importdata(strcat(dataloc,guiVal.phantomList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 freq=darkimport.data(:,1); %Importing frequency range
+
 darkdat=20*log10(darkimport.data(:,3)); %Importing dark data
 msmtdat=20*log10(msmtimport.data(:,3)); %Importing "tissue" data
 phandat=20*log10(phanimport.data(:,3)); %Importing calibrator data
 
+caldat=msmtimport.data(:,3)./phanimport.data(:,3); %Calibrated signal
+% caldat=caldat./caldat(1);
 snrmsmt=msmtdat./darkdat; %Calculating the ratio of signal to noise (pseudo SNR)
 snrphan=phandat./darkdat;
 
-msmtcut=find(snrmsmt>0.9,1); %If this ratio is equal or greater than 1, the signal is dominated by noise
-phancut=find(snrphan>0.9,1);
+msmtcut=find(snrmsmt>0.75,1); %If this ratio is equal or greater than 1, the signal is dominated by noise
+phancut=find(snrphan>0.75,1);
 
 if isempty(msmtcut) %If the entire amplitude is above the noise floor, set to the max freq
     msmtcut=max(freq);

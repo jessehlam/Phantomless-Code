@@ -22,7 +22,8 @@ mu_figure.DefaultAxesFontSize= 7;
 mu_figure.DefaultAxesXTick= [];
 mu_figure.DefaultAxesXLim= [final.freq(1)-50 final.freq(length(final.freq))+50];
 mu_figure.DefaultAxesYLim= [-Inf Inf];
-mu_figure.DefaultAxesLineStyleOrder='*|o|^';
+% mu_figure.DefaultAxesLineStyleOrder='*|o|^';
+mu_figure.DefaultAxesLineStyleOrder='-';
 mu_figure.DefaultLineMarkerSize= 5;
 %mu_figure.DefaultAxesColorOrder=[]; %[1.0 0 0; 0 1.0 1.0; 0 0 1.0];
 set(g, mu_figure);
@@ -42,7 +43,7 @@ for a=1:nDiodes,
 	axes_pos = get(haxes, 'Position');
 	set(haxes, 'Position', [axes_pos(1)+0.05 axes_pos(2)-.01 axes_pos(3) axes_pos(4)]); %with plot why, for each axes_pos , replace with axes_pos{1}
 	hold on;
-	plot(final.freq, fit.amp(:,a), 'r','markersize',3);
+	plot(final.freq, fit.amp(:,a), 'r-','linewidth',2);
 	axes('Position', axes_pos,'Visible','off');
 	text(.025,.3,int2str(diodes(a)),'FontSize',10, 'Rotation', 90);
 	if a == 1, 
@@ -58,7 +59,7 @@ for a=1:nDiodes,
 	axes_pos = get(haxes, 'Position');
 	set(haxes, 'Position', [axes_pos(1)+0.05 axes_pos(2)-.01 axes_pos(3) axes_pos(4)]);
 	hold on;
-	plot(final.freq, fit.phi(:,a), 'r','markersize',3);
+	plot(final.freq, fit.phi(:,a), 'r-','linewidth',2);
 	if a == 1, 
 		axes('Position', axes_pos,'Visible','off');
 		text(200, axes_pos(2)+0.6,'PHASE (rad)','FontSize',8); %& RESIDUE
