@@ -1,11 +1,14 @@
 function writeSummaryFiles(fdpm, spec,bw,p ,physio, o, nFiles, final)
 
-if o.averaged==1
-    fitbase=o.fitbase;
-else
-    fitbase=p.fitbase;
-end
+% if o.averaged==1
+%     fitbase=o.fitbase;
+% else
+%     fitbase=p.fitbase;
+% end
 
+cd(strcat(p.rootdir,p.patientID));
+mkdir('PROCESSED')
+cd(strcat(p.rootdir,p.patientID,'\PROCESSED'))
 
 a= sprintf('%% ANAYLSIS DATE   :\t%s\n',datestr(now));
 d=sprintf('%% REFERENCE FILE  :\t%s\n\n',strcat(fdpm.cal.phantoms{:}));
@@ -57,7 +60,7 @@ concformat = [concformat,' \n'];
 
 % all_conc (and fdpm) _file
 
-conc_file=strcat(fitbase,'_SUM',spec.suffix);
+conc_file=strcat(p.outLabel,'_SUM',spec.suffix);
 
 
 fid=fopen(conc_file, 'w');
@@ -67,11 +70,11 @@ fprintf(fid, 'FDPM Results: \t real/imag fit: %d \t weighting: %d\nMUA\tUberfit:
 fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mua']');
 fprintf(fid, 'MUS\n');
 fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mus']');
-fprintf(fid, 'MUA_ERR\n');
-fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mua_err']');
-fprintf(fid, 'MUS_ERR\n');
-fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mus_err']');
-fprintf(fid, 'converged\n');
+% fprintf(fid, 'MUA_ERR\n');
+% fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mua_err']');
+% fprintf(fid, 'MUS_ERR\n');
+% fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.mus_err']');
+% fprintf(fid, 'converged\n');
 if fdpm.opt.scatfit %only for uberfit
         guss=o.fd.guessnum*ones(size(fdpm.diodes));
     if o.fd.conv
@@ -81,7 +84,7 @@ if fdpm.opt.scatfit %only for uberfit
     end
         fprintf(fid, wvfileformat, [fdpm.diodes' conv']');
 else
-    fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.conv']');
+    fprintf(fid, wvfileformat, [fdpm.diodes']');
 end
 if (fdpm.cal.which==3) %% Report which phantom if multiple selected
     fprintf(fid, 'Calibration Phantom\n');
@@ -95,17 +98,17 @@ if (fdpm.cal.which==3) %% Report which phantom if multiple selected
     fid=fopen(conc_file, 'a+');
 end
 fprintf(fid, 'SCATTERING\n');
-fprintf(fid, concformat, 'Slope', o.fd.slope);
-fprintf(fid, concformat, 'Prefactor', o.fd.preft);
-fprintf(fid, concformat, 'Slope Err', o.fd.dslope);
-fprintf(fid, concformat, 'Prefactor Err', o.fd.dpreft);
+% fprintf(fid, concformat, 'Slope', o.fd.slope);
+% fprintf(fid, concformat, 'Prefactor', o.fd.preft);
+% fprintf(fid, concformat, 'Slope Err', o.fd.dslope);
+% fprintf(fid, concformat, 'Prefactor Err', o.fd.dpreft);
 fprintf(fid, 'GUESS #\n');
 
-if fdpm.opt.scatfit %only for uberfit
-    fprintf(fid, wvfileformat, [fdpm.diodes' guss']');
-else
-    fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.guessnum']');
-end
+% if fdpm.opt.scatfit %only for uberfit
+%     fprintf(fid, wvfileformat, [fdpm.diodes' guss']');
+% else
+%     fprintf(fid, wvfileformat, [fdpm.diodes' o.fd.guessnum']');
+% end
 
 if physio.fdpm.fit, fprintf(fid, concformat, 'FDPM MUA RESIDUAL', o.fd.ss); end;
 
@@ -129,40 +132,40 @@ fclose(fid);
 
 
 
-%% db files
-fid = fopen( strcat(fitbase, '_dBMU', spec.suffix), 'w');
-fprintf(fid, 'patientID \tdate \tposition \twv \tmua \tdmua \tmus \tdmus \tfitmethod \tcomment\n');
-fid2 = fopen( strcat(fitbase, '_dBSUM	', spec.suffix), 'w');
-fprintf(fid2, 'patientID\t date \t position \t variable \t value \t dvalue \t fitmethod \tcomment\n');
-sumformat = '%s \t%s \t%s \t%s \t%8.12f \t%8.12f \t%s\t%s\n';
-if isfield(o.fd, 'physio')
-	nChromFD = size(o.fd.physio,2)/2;
-end
-if isfield(o.ss, 'physio')
-	nChromSS = size(o.ss.physio,2)/2;
-end
-
-% if physio.spec.fit
-% fid3 = fopen( strcat(fitbase, 'SPEC-rob', spec.suffix), 'w');
-% fprintf(fid3, 'measurementID\t time\t HbO2 \t Hb \t H2O \t Fat \t THC \t O2Sat \t 660mua \t 660mus \t 690mua \t 690mus \t 785mua \t 785mus \t 830mua \t 830mus \t preft \t slope\n');
-% sumformat3 = '%s \t %s \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f\n';
-%     for i=1:nFiles,
-%             %fprintf(fid3, sumformat3, newfilelist(i,:), final(i).time, o.ss.physio{i+1,1}, o.ss.physio{i+1,2}, o.ss.physio{i+1,3}, o.ss.physio{i+1,4}, o.ss.physio{i+1,6}, o.ss.physio{i+1,7}, o.fd.mua(i,1),o.fd.mus(i,1),o.fd.mua(i,2),o.fd.mus(i,2),o.fd.mua(i,3),o.fd.mus(i,3), o.fd.preft(1,i), o.fd.slope(1,i));                      
-%             fprintf(fid3, sumformat3, newfilelist(i,:), final(i).time, o.ss.physio{i+1,1}, o.ss.physio{i+1,2}, o.ss.physio{i+1,3}, o.ss.physio{i+1,4}, o.ss.physio{i+1,6}, o.ss.physio{i+1,7}, o.fd.mua(i,1),o.fd.mus(i,1),o.fd.mua(i,2),o.fd.mus(i,2),o.fd.mua(i,3),o.fd.mus(i,3), o.fd.mua(i,4),o.fd.mus(i,4), o.fd.preft(1,i), o.fd.slope(1,i));                      
-%     end
-%     fclose(fid3);
+% %% db files
+% fid = fopen( strcat(p.outLabel, '_dBMU', spec.suffix), 'w');
+% fprintf(fid, 'patientID \tdate \tposition \twv \tmua \tdmua \tmus \tdmus \tfitmethod \tcomment\n');
+% fid2 = fopen( strcat(p.outLabel, '_dBSUM	', spec.suffix), 'w');
+% fprintf(fid2, 'patientID\t date \t position \t variable \t value \t dvalue \t fitmethod \tcomment\n');
+% sumformat = '%s \t%s \t%s \t%s \t%8.12f \t%8.12f \t%s\t%s\n';
+% if isfield(o.fd, 'physio')
+% 	nChromFD = size(o.fd.physio,2)/2;
 % end
+% if isfield(o.ss, 'physio')
+% 	nChromSS = size(o.ss.physio,2)/2;
+% end
+% 
+% % if physio.spec.fit
+% % fid3 = fopen( strcat(p.outLabel, 'SPEC-rob', spec.suffix), 'w');
+% % fprintf(fid3, 'measurementID\t time\t HbO2 \t Hb \t H2O \t Fat \t THC \t O2Sat \t 660mua \t 660mus \t 690mua \t 690mus \t 785mua \t 785mus \t 830mua \t 830mus \t preft \t slope\n');
+% % sumformat3 = '%s \t %s \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%8.12f\n';
+% %     for i=1:nFiles,
+% %             %fprintf(fid3, sumformat3, newfilelist(i,:), final(i).time, o.ss.physio{i+1,1}, o.ss.physio{i+1,2}, o.ss.physio{i+1,3}, o.ss.physio{i+1,4}, o.ss.physio{i+1,6}, o.ss.physio{i+1,7}, o.fd.mua(i,1),o.fd.mus(i,1),o.fd.mua(i,2),o.fd.mus(i,2),o.fd.mua(i,3),o.fd.mus(i,3), o.fd.preft(1,i), o.fd.slope(1,i));                      
+% %             fprintf(fid3, sumformat3, newfilelist(i,:), final(i).time, o.ss.physio{i+1,1}, o.ss.physio{i+1,2}, o.ss.physio{i+1,3}, o.ss.physio{i+1,4}, o.ss.physio{i+1,6}, o.ss.physio{i+1,7}, o.fd.mua(i,1),o.fd.mus(i,1),o.fd.mua(i,2),o.fd.mus(i,2),o.fd.mua(i,3),o.fd.mus(i,3), o.fd.mua(i,4),o.fd.mus(i,4), o.fd.preft(1,i), o.fd.slope(1,i));                      
+% %     end
+% %     fclose(fid3);
+% % end
 
 
 for i=1:nFiles,
-    for k=1:fdpm.ndiodes,
-        fprintf(fid, '%s \t%s \t%s \t%d \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%s\t%s\n', p.patientID, ...
-            p.date,newfilelist(i,:), fdpm.diodes(k),  o.fd.mua(i,k),  o.fd.mua_err(i,k), ...
-            o.fd.mus(i,k), o.fd.mus_err(i,k), fdpm.model_to_fit, p.outLabel);
-    end    
+%     for k=1:fdpm.ndiodes,
+%         fprintf(fid, '%s \t%s \t%s \t%d \t%8.12f \t%8.12f \t%8.12f \t%8.12f \t%s\t%s\n', p.patientID, ...
+%             p.date,newfilelist(i,:), fdpm.diodes(k),  o.fd.mua(i,k), ...
+%             o.fd.mus(i,k), fdpm.model_to_fit, p.outLabel);
+%     end    
 	%same changes here: AEC for average
-	fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'slope',  o.fd.slope(i), o.fd.dslope(i), 'FD', p.outLabel);
-	fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'preft',  o.fd.preft(i), o.fd.dpreft(i), 'FD', p.outLabel);
+% 	fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'slope',  o.fd.slope(i), o.fd.dslope(i), 'FD', p.outLabel);
+% 	fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'preft',  o.fd.preft(i), o.fd.dpreft(i), 'FD', p.outLabel);
     if o.averaged==0
         o.fd.dss(i)=0;
     end
@@ -174,111 +177,111 @@ for i=1:nFiles,
         end
     end
 end
-fclose(fid);
-%% TIME FILE
-fid = fopen( strcat(fitbase, '_TIME', spec.suffix), 'w');
-fprintf(fid,'position\ttime\n');
-for i=1:nFiles
-    fprintf(fid,'%s\t%s\n',newfilelist(i,:),final(i).timestamp);
-end
-fclose(fid);
+% fclose(fid);
+% %% TIME FILE
+% fid = fopen( strcat(p.outLabel, '_TIME', spec.suffix), 'w');
+% fprintf(fid,'position\ttime\n');
+% for i=1:nFiles
+%     fprintf(fid,'%s\t%s\n',newfilelist(i,:),final(i).timestamp);
+% end
+% fclose(fid);
+% 
+% if ~spec.on
+% 	fclose(fid2);
+% 	return; % .. b/c the rest is spectroscopy reporting
+% end
+% 
+% %rest of db writing
+% if spec.on
+%     for i=1:nFiles,
+%         fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'slope',  o.ss.slope(i), o.ss.dslope(i), 'SS', p.outLabel); %AEC added
+%         fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'preft',  o.ss.preft(i), o.ss.dpreft(i), 'SS', p.outLabel);
+%         if physio.spec.fit
+%             nChromSS = size(o.ss.physio,2)/2;
+%             for k=1:nChromSS
+%                 fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), o.ss.physio{1,k}, o.ss.physio{1+i, k}, ...
+%                     o.ss.physio{1+i,k+nChromSS}, 'SS', p.outLabel);
+%             end
+%         end
+%         if bw.fit && spec.on
+%             fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'BWI',  o.bw.bwi(i), 0, 'SS', p.outLabel);
+%         end
+%     end
+% end
+% fclose(fid2);
 
-if ~spec.on
-	fclose(fid2);
-	return; % .. b/c the rest is spectroscopy reporting
-end
-
-%rest of db writing
-if spec.on
-    for i=1:nFiles,
-        fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'slope',  o.ss.slope(i), o.ss.dslope(i), 'SS', p.outLabel); %AEC added
-        fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'preft',  o.ss.preft(i), o.ss.dpreft(i), 'SS', p.outLabel);
-        if physio.spec.fit
-            nChromSS = size(o.ss.physio,2)/2;
-            for k=1:nChromSS
-                fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), o.ss.physio{1,k}, o.ss.physio{1+i, k}, ...
-                    o.ss.physio{1+i,k+nChromSS}, 'SS', p.outLabel);
-            end
-        end
-        if bw.fit && spec.on
-            fprintf(fid2, sumformat, p.patientID, p.date, newfilelist(i,:), 'BWI',  o.bw.bwi(i), 0, 'SS', p.outLabel);
-        end
-    end
-end
-fclose(fid2);
-
-%% CHROM FILES
-if physio.fdpm.fit
-    fid = fopen( strcat(fitbase, '_CHROM_FD', spec.suffix), 'w');
-    fprintf(fid,'position\tslope\tslope_err\tpreft\tpreft_err\t');
-    for k=1:nChromFD
-        fprintf(fid,'%s\t%s\t',o.fd.physio{1,k},strcat(o.fd.physio{1,k},'_err'));
-    end
-    fprintf(fid,'\n');
-    for i=1:nFiles
-        fprintf(fid,'%s\t',newfilelist(i,:));
-        fprintf(fid,'%8.12f\t%8.12f\t',o.fd.slope(i),o.fd.dslope(i));
-        fprintf(fid,'%8.12f\t%8.12f\t',o.fd.preft(i),o.fd.dpreft(i));
-        for k=1:nChromFD
-            fprintf(fid,'%8.12f\t%8.12f\t',o.fd.physio{1+i,k},o.fd.physio{1+i,k+nChromFD});
-        end
-        fprintf(fid,'\n');
-    end
-    fclose(fid);
-end
-if physio.spec.fit
-    fid = fopen( strcat(fitbase, '_CHROM_SS', spec.suffix), 'w');
-    fprintf(fid,'position\tslope\tslope_err\tpreft\tpreft_err\t');
-    for k=1:nChromSS
-        fprintf(fid,'%s\t%s\t',o.ss.physio{1,k},strcat(o.ss.physio{1,k},'_err'));
-    end
-    fprintf(fid,'\n');
-    for i=1:nFiles
-        fprintf(fid,'%s\t',newfilelist(i,:));
-        fprintf(fid,'%8.12f\t%8.12f\t',o.ss.slope(i),o.ss.dslope(i));
-        fprintf(fid,'%8.12f\t%8.12f\t',o.ss.preft(i),o.ss.dpreft(i));
-        for k=1:nChromSS
-            fprintf(fid,'%8.12f\t%8.12f\t',o.ss.physio{1+i,k},o.ss.physio{1+i,k+nChromSS});
-        end
-        fprintf(fid,'\n');
-    end
-    fclose(fid);
-end
+% %% CHROM FILES
+% if physio.fdpm.fit
+%     fid = fopen( strcat(p.outLabel, '_CHROM_FD', spec.suffix), 'w');
+%     fprintf(fid,'position\tslope\tslope_err\tpreft\tpreft_err\t');
+%     for k=1:nChromFD
+%         fprintf(fid,'%s\t%s\t',o.fd.physio{1,k},strcat(o.fd.physio{1,k},'_err'));
+%     end
+%     fprintf(fid,'\n');
+%     for i=1:nFiles
+%         fprintf(fid,'%s\t',newfilelist(i,:));
+%         fprintf(fid,'%8.12f\t%8.12f\t',o.fd.slope(i),o.fd.dslope(i));
+%         fprintf(fid,'%8.12f\t%8.12f\t',o.fd.preft(i),o.fd.dpreft(i));
+%         for k=1:nChromFD
+%             fprintf(fid,'%8.12f\t%8.12f\t',o.fd.physio{1+i,k},o.fd.physio{1+i,k+nChromFD});
+%         end
+%         fprintf(fid,'\n');
+%     end
+%     fclose(fid);
+% end
+% if physio.spec.fit
+%     fid = fopen( strcat(p.outLabel, '_CHROM_SS', spec.suffix), 'w');
+%     fprintf(fid,'position\tslope\tslope_err\tpreft\tpreft_err\t');
+%     for k=1:nChromSS
+%         fprintf(fid,'%s\t%s\t',o.ss.physio{1,k},strcat(o.ss.physio{1,k},'_err'));
+%     end
+%     fprintf(fid,'\n');
+%     for i=1:nFiles
+%         fprintf(fid,'%s\t',newfilelist(i,:));
+%         fprintf(fid,'%8.12f\t%8.12f\t',o.ss.slope(i),o.ss.dslope(i));
+%         fprintf(fid,'%8.12f\t%8.12f\t',o.ss.preft(i),o.ss.dpreft(i));
+%         for k=1:nChromSS
+%             fprintf(fid,'%8.12f\t%8.12f\t',o.ss.physio{1+i,k},o.ss.physio{1+i,k+nChromSS});
+%         end
+%         fprintf(fid,'\n');
+%     end
+%     fclose(fid);
+% end
 %% mua_file
-mua_file=strcat(fitbase,'_MUA_and_fit',spec.suffix);
-fid=fopen(mua_file, 'w');
-fprintf(fid, '%s', header); fprintf(fid,'%% %s\n','mua in (1/mm)');
-fprintf(fid,'%% chromophore file = %s\n',physio.chrom.file); fprintf(fid,'%% %s\t','wavelength(nm)');
-fileformat='%8.12f\t';
-for i=1:nFiles    
-    if physio.spec.fit
-        fprintf(fid,'%s\t %s\t',char(newfilelist(i,:)),'fit');
-        fileformat=[fileformat,' %8.12f\t %8.12f\t'];
-    else
-        fprintf(fid,'%s\t',char(newfilelist(i,:)));
-        fileformat=[fileformat,' %8.12f\t'];
-    end
-end   
-fprintf(fid,'\n'); fileformat=[fileformat,'\n'];    
-fprintf(fid, fileformat, [spec.wvrange' o.ss.mua]'); 
-fclose(fid);
-
-    % mua_file_w/o_fitted_spec
-    a_file=strcat(fitbase,'_MUA',spec.suffix);
-    fid=fopen(a_file, 'w');
-
-    fileformat='%8.12f\t';
-    fprintf(fid,'%s\t','wavelength');
-    for i=1:nFiles
-        fprintf(fid,'%s\t',char(newfilelist(i,:)));
-        fileformat=[fileformat,' %8.12f\t'];
-    end
-    fprintf(fid,'%s\t','average');
-    fileformat=[fileformat,' %8.12f\t'];
-    fprintf(fid,'%s\t','standard deviation');
-    fileformat=[fileformat,' %8.12f\t'];
-    fprintf(fid,'\n');fileformat=[fileformat,'\n'];
-    fprintf(fid, fileformat, [spec.wvrange' o.ss.muaonly mean(o.ss.muaonly,2) std(o.ss.muaonly,0,2)]');
+% mua_file=strcat(p.outLabel,'_MUA_and_fit',spec.suffix);
+% fid=fopen(mua_file, 'w');
+% fprintf(fid, '%s', header); fprintf(fid,'%% %s\n','mua in (1/mm)');
+% fprintf(fid,'%% chromophore file = %s\n',physio.chrom.file); fprintf(fid,'%% %s\t','wavelength(nm)');
+% fileformat='%8.12f\t';
+% for i=1:nFiles    
+%     if physio.spec.fit
+%         fprintf(fid,'%s\t %s\t',char(newfilelist(i,:)),'fit');
+%         fileformat=[fileformat,' %8.12f\t %8.12f\t'];
+%     else
+%         fprintf(fid,'%s\t',char(newfilelist(i,:)));
+%         fileformat=[fileformat,' %8.12f\t'];
+%     end
+% end   
+% fprintf(fid,'\n'); fileformat=[fileformat,'\n'];    
+% fprintf(fid, fileformat, [spec.wvrange' o.ss.mua]'); 
+% fclose(fid);
+% 
+%     % mua_file_w/o_fitted_spec
+%     a_file=strcat(p.outLabel,'_MUA',spec.suffix);
+%     fid=fopen(a_file, 'w');
+% 
+%     fileformat='%8.12f\t';
+%     fprintf(fid,'%s\t','wavelength');
+%     for i=1:nFiles
+%         fprintf(fid,'%s\t',char(newfilelist(i,:)));
+%         fileformat=[fileformat,' %8.12f\t'];
+%     end
+%     fprintf(fid,'%s\t','average');
+%     fileformat=[fileformat,' %8.12f\t'];
+%     fprintf(fid,'%s\t','standard deviation');
+%     fileformat=[fileformat,' %8.12f\t'];
+%     fprintf(fid,'\n');fileformat=[fileformat,'\n'];
+%     fprintf(fid, fileformat, [spec.wvrange' o.ss.muaonly mean(o.ss.muaonly,2) std(o.ss.muaonly,0,2)]');
 
 
 %     A = zeros(length(spec.wvrange),nFiles+3);
@@ -300,7 +303,7 @@ fclose(fid);
 %     end
 
 
-    fclose(fid); 
+%     fclose(fid); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -309,19 +312,20 @@ fclose(fid);
 
 
 
-spec.opt.muaSPEC_from_file=0;
-if spec.opt.muaSPEC_from_file==0,  
-	% Reflectance_file
-	ss_file=strcat(fitbase,'_specR',spec.suffix);
-	fid=fopen(ss_file, 'w');
-	fprintf(fid, ['%s\n' filelist '\n'], header);
-	fprintf(fid, wvfileformat, [spec.wvrange' o.ss.R]'); 
-	fclose(fid);  
-end
+% spec.opt.muaSPEC_from_file=0;
+% if spec.opt.muaSPEC_from_file==0,  
+% 	% Reflectance_file
+% 	ss_file=strcat(p.outLabel,'_specR',spec.suffix);
+% 	fid=fopen(ss_file, 'w');
+% 	fprintf(fid, ['%s\n' filelist '\n'], header);
+% 	fprintf(fid, wvfileformat, [spec.wvrange' o.ss.R]'); 
+% 	fclose(fid);  
+% end
 
 %muspSPEC 
-e_file=strcat(fitbase,'_MUS',spec.suffix);
-fid=fopen(e_file, 'w');
-fprintf(fid, ['%s\n' filelist '\n'], header);
-fprintf(fid, wvfileformat, [spec.wvrange' o.ss.mus]'); 
-fclose(fid); 
+% e_file=strcat(p.outLabel,'_MUS',spec.suffix);
+% fid=fopen(e_file, 'w');
+% fprintf(fid, ['%s\n' filelist '\n'], header);
+% fprintf(fid, wvfileformat, [spec.wvrange' o.ss.mus]'); 
+% fclose(fid); 
+fclose('all');

@@ -27,10 +27,9 @@ for i=1:nFiles,
     end;
 %     [o.fd.mua(i,:), o.fd.mus(i,:), o.fd.mua_err(i,:), o.fd.mus_err(i,:), o.fd.preft(i), o.fd.ss(i)]  =  ...
 %         deal(fdpmfit(i).mua, fdpmfit(i).mus, fdpmfit(i).dmua, fdpmfit(i).dmus, fdpmfit(i).preft,fdpmfit(i).ss);
-       [o.fd.mua(i,:), o.fd.mus(i,:), o.fd.mua_err(i,:), o.fd.mus_err(i,:), o.fd.preft(i)]  =  ...
-        deal(fdpmfit(i).mua, fdpmfit(i).mus, fdpmfit(i).dmua, fdpmfit(i).dmus, fdpmfit(i).preft);
-    [o.fd.dpreft(i), o.fd.slope(i), o.fd.dslope(i), o.fd.conv(i,:), o.fd.guessnum(i,:), o.fd.guesses(i,:)] = deal(fdpmfit(i).dpreft, ...
-        fdpmfit(i).slope, fdpmfit(i).dslope,fdpmfit(i).converged, fdpmfit(i).guessnum, fdpmfit(i).guesses);
+       [o.fd.mua(i,:), o.fd.mus(i,:)]  =  ...
+        deal(fdpmfit(i).mua, fdpmfit(i).mus);
+%     [o.fd.slope(i), o.fd.dslope(i), o.fd.conv(i,:), o.fd.guessnum(i,:), o.fd.guesses(i,:)] = deal(fdpmfit(i).slope, fdpmfit(i).dslope,fdpmfit(i).converged, fdpmfit(i).guessnum, fdpmfit(i).guesses);
     [minfreq(i) maxfreq(i) r1(i) r2(i)] = deal(min(final(i).freq), max(final(i).freq), final(i).dist, 0);
 
     [o.fd.gbfi_amp(i,:),o.fd.gbfi_phi(i,:)] = deal(fdpmfit(i).gbfi(:,1),fdpmfit(i).gbfi(:,2));

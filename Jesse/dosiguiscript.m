@@ -6,17 +6,17 @@ clear p
 global guiVal;
 
 plotraw=1; %Plot raw data?
-warning('off'); %Keep off or lots of orange text
 rho=23.5; %S-D separation
 fdpm.glass=5.2; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
-fdpm.diodes = [798]; %[657 689 779 798 829] I somehow broke auto diode checking...
+yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
+fdpm.diodes = 779; %[657 689 779 798 829] I somehow broke auto diode checking...
 smartfreq=1;
     
 %Looks for phantom file in "separate_base_list_filter" line 38 <----
 %i.e. Add your calibration file's naming scheme here
 
 %% FDPM Calibration Settings
+warning('off'); %Keep off or lots of orange text
 fdpm.cal.which = 1;   
 % selects the calibration method.  1 (off phantom) is standard.  
 % 0 uncalibrated; 1 off phantom (multiple phantoms get averaged); 2 is 2 distance (not coded); 3 is multiple phantoms and autoselect by diode (phantoms do not get averaged)
@@ -96,16 +96,13 @@ fdpm.stderr=[0.03, 0.3];
 % used when reading in fdpm files averageFDPMDataAtDiodes.m
 
 
-freqcalc %Calculates the starting  and ending frequency
-% fdpm.up=numup; %Starting frequency (cuts off the non-linear region of the amplitude)
-% fdpm.down=numdown; %Ending frequency (cuts off amplitude that dips into the noise floor)
-%Calculate the usable frequency range
+freqcalc
+%Calculates the starting  and ending frequency
 
-% fdpm.freqrange = [50; 350];
 if smartfreq==1;
-    fdpm.freqrange = [50; down];
+    fdpm.freqrange = [100; down]; %Lose the 50mhz noise, use rest of freq band
 else
-    fdpm.freqrange = [50; 400];
+    fdpm.freqrange = [50; 400]; %Needs as much freq info as possible, start at 50mhz
 end
 
 % fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
@@ -308,7 +305,7 @@ p.patientID=guiVal.patientID;
 p.date=guiVal.date;
 % date in directory
 
-p.outLabel=['pt' guiVal.patientID '_' guiVal.date '_' guiVal.filePrefix];
+p.outLabel=[guiVal.filePrefix];
 % name appended to output files
 
 p.verbose = 1;

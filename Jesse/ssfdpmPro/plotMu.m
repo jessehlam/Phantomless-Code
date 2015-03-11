@@ -66,9 +66,15 @@ for a=1:nDiodes,
 	elseif a == nDiodes, 
 		xlabel('FREQUENCY (MHz)');  
 	end;
-end  
+  
 
-if p.savefitgraphs
-    naampje = [p.processed_dir '\recon graphs\_' p.outLabel '_' name '_plotMU.jpg'];
-    saveas(g,naampje,'jpg')
+    if p.savefitgraphs
+        p.processed_dir=strcat(p.rootdir,p.patientID,'\PROCESSED\');
+        cd(p.processed_dir)
+        mkdir('Graphs\')
+        if p.savefitgraphs
+            naampje = [p.processed_dir 'Graphs\' p.outLabel '-' fit.title '_plotMU.jpg'];
+            saveas(figure(1),naampje,'jpg')
+        end
+    end
 end
