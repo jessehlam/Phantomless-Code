@@ -48,7 +48,7 @@ for j=1:nFiles
     
     plotMu(final(j), fdpmfit(j), fdpm.diodes,pro.prefixes{j},1,pro);
     %Plots the calibrated data and best fitting amplitude/phase
-    
+    plotSS(spec.wvrange, fdpmfit(j), ssfdpmfit(j), fdpm.diodes, pro.prefixes{j}, 2, spec.usediodes, pro);  %need to modify this function slightly since added argument
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% SPEC FIT
     if spec.on
@@ -81,9 +81,9 @@ for j=1:nFiles
             ssfdpmchrom = physioSetup(physio, spec.wvrange,spec.opt.baseline);
         end
         [ssfdpmfit(j).phy, ssfdpmfit(j).fitmua, ssfdpmfit(j).ss] = physioFit(physio.fittype, ssfdpmchrom, ssfdpmfit(j).muaSPEC, ones(size(ssfdpmfit(j).muaSPEC)), pro.verbose);
-        if pro.graphing==1
-            plotSS(spec.wvrange, fdpmfit(j), ssfdpmfit(j), fdpm.diodes, pro.prefixes{j}, 2, spec.usediodes, pro);  %need to modify this function slightly since added argument
-        end
+%         if pro.graphing==1
+%             plotSS(spec.wvrange, fdpmfit(j), ssfdpmfit(j), fdpm.diodes, pro.prefixes{j}, 2, spec.usediodes, pro);  %need to modify this function slightly since added argument
+%         end
     end
     %% Bound Water Fit
     if bw.fit && spec.on

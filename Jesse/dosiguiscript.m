@@ -5,13 +5,15 @@ clear physio
 clear p
 global guiVal;
 
-plotraw=1; %Plot raw data?
+plotraw=0; %Plot raw data?
 rho=23.5; %S-D separation
 fdpm.glass=5.2; %Length of glass in calibrator
 yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
-fdpm.diodes = 779; %[657 689 779 798 829] I somehow broke auto diode checking...
-smartfreq=1;
-    
+% fdpm.diodes = [657 779 798 829]; %I somehow broke auto diode checking...
+smartfreq=0;
+p.savefitgraphs=0;
+p.fileWrite=0;
+
 %Looks for phantom file in "separate_base_list_filter" line 38 <----
 %i.e. Add your calibration file's naming scheme here
 
@@ -65,7 +67,7 @@ fdpm.source=guiVal.source;
 % the measurement
 
 % fdpm.diodes = [779]; 
-% fdpm.diodes = guiVal.fdpm_diodes;
+fdpm.diodes = guiVal.fdpm_diodes;
 % diode wavelengths to use for fdpm processing 
 % must match wavelengths in measurement files
 % in some cases with noisy data, diodes can be taken out to improve the
@@ -95,14 +97,19 @@ fdpm.stderr=[0.03, 0.3];
 % calculated
 % used when reading in fdpm files averageFDPMDataAtDiodes.m
 
-
-freqcalc
+if smartfreq==1
+    freqcalc
+end
 %Calculates the starting  and ending frequency
 
 if smartfreq==1;
     fdpm.freqrange = [100; down]; %Lose the 50mhz noise, use rest of freq band
 else
-    fdpm.freqrange = [50; 400]; %Needs as much freq info as possible, start at 50mhz
+    fdpm.freqrange = [100; 450]; %Needs as much freq info as possible, start at 50mhz
+end
+
+if plotraw==1;
+    rawplot
 end
 
 % fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
@@ -314,10 +321,10 @@ p.verbose = 1;
 p.graphing = 1;
 % turns on graphing during processing
 
-p.savefitgraphs=0;
-% saves graphs to file
-
-p.fileWrite=0;
+% p.savefitgraphs=0;
+% % saves graphs to file
+% 
+% p.fileWrite=0;
 % saves output files
 
 p.gridimager=0;
@@ -325,10 +332,6 @@ p.gridimager=0;
 
 %%Run Processing
 error = ssfdpmPRO(fdpm,spec,physio,bw,p);
-
-if plotraw==1;
-    rawplot
-end
 
 cd(yourDIR);
 %For some reason, program changes directory to where the data is. This will

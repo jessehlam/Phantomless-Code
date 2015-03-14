@@ -39,10 +39,15 @@ else
     %Normalizes the calibrated data by fitting a polynomial to the first 40
     %frequencies then dividing everything by the first point of that
     %polynomial
-      ampfit = polyfit(freq(1:40),amp(1:40),2);
-      ampoly = polyval(ampfit,freq);  
-%       DATA=[10*(amp./ampoly(1));phi];
-      DATA=[(amp./ampoly(1));phi];
+    for loop=1:length(diodes)
+      ampfit = polyfit(freq(1:40),amp(1:40,loop),1);
+      ampoly = polyval(ampfit,freq);
+      amp(:,loop)=amp(:,loop)./ampoly(1);
+    end
+    
+%     DATA=[(amp./ampoly(1));phi];
+    DATA=[amp;phi];
+    %       DATA=[10*(amp./ampoly(1));phi];
 end
 
 flen = length(freq);

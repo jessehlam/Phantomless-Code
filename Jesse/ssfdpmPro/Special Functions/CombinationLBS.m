@@ -2,12 +2,12 @@
 
 clear
 clc
-
+warning('off')
 % dirString = 'C:\Users\Kyle\Downloads\150310';
 % pathString = 'C:\Users\Kyle\Downloads\150310\150310';
 % phantomList = {'ARYA' 'INO1' 'OBERYN1' 'VACS1' 'VACS2' 'PH010' 'ACRIN2' 'BOT1'};
-dirString = 'C:\Users\Kyle\Downloads\150313\150313\';
-pathString = 'C:\Users\Kyle\Downloads\150313\150313\msmt';
+dirString = 'C:\Users\Jesse\Desktop\Phantoms\d4\combined';
+pathString = 'C:\Users\Jesse\Desktop\Phantoms\d4\msmt';
 phantomList = {'ARYA4' 'OBERYN1'};
 for lists = 1:length(phantomList)
     % files = dir(strcat(pathString,'\*ARYA4-MATCH-dcswitch.asc'))
@@ -202,7 +202,7 @@ for lists = 1:length(phantomList)
         end
     end
     
-    headerLine12 = 'Laser names: 657 689 779 798 829 *End of laser names';
+    headerLine12 = 'Laser names: 657 779 798 829 *End of laser names';
     headerLine16= {'Frequency (MHz)' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp'};
     cd(dirString)
     fid = fopen(strcat(phantomName,'-MATCH-dcswitch.asc'),'w');

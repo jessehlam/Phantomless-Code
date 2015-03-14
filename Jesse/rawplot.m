@@ -1,15 +1,16 @@
 
 figure(2)
-plot(freq,msmtdat); %Plots the raw amplitudes
+plot(freq,msmtdat,'b:','linewidth',3); %Plots the raw amplitudes
 hold on
-plot(freq,phandat,'r');
-plot(freq,darkdat,'k');
-line([fdpm.freqrange(1) fdpm.freqrange(1)],[min(darkdat) max(phandat)],'color','g');
-line([fdpm.freqrange(2) fdpm.freqrange(2)],[min(darkdat) max(phandat)],'color','g')
+plot(freq,phandat,'r--','linewidth',3);
+plot(freq,darkdat,'k-','linewidth',0.5);
+line([fdpm.freqrange(1) fdpm.freqrange(1)],[min(darkdat) max(phandat)],'color','g','linewidth',4);
+line([fdpm.freqrange(2) fdpm.freqrange(2)],[min(darkdat) max(phandat)],'color','g','linewidth',4)
 hold off
 title('Raw Signals');
 legend('Measurement','Calibrator','Dark','Cutoff','location','best');
 xlabel('Frequency (MHz)');
+ylabel('Log Amplitude');
 
 figure(3)
 plot(freq,caldat,'k');
@@ -20,6 +21,7 @@ hold off
 legend('Calibrated Signal','Cutoff');
 title('Calibrated Signal');
 xlabel('Frequency (MHz)');
+
 % figure(4)
 % plot(freq,snrmsmt); %Plots the SNR ratios
 % hold on

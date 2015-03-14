@@ -69,9 +69,11 @@ for a=1:nDiodes,
   
 
     if p.savefitgraphs
+        cd(strcat(p.rootdir,p.patientID));
+        mkdir('PROCESSED');
         p.processed_dir=strcat(p.rootdir,p.patientID,'\PROCESSED\');
         cd(p.processed_dir)
-        mkdir('Graphs\')
+        mkdir('Graphs')
         if p.savefitgraphs
             naampje = [p.processed_dir 'Graphs\' p.outLabel '-' fit.title '_plotMU.jpg'];
             saveas(figure(1),naampje,'jpg')

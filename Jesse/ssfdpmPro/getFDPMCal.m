@@ -108,7 +108,7 @@ if which_cal==1     %% OFF PHANTOM
         
         %%%jhl Phantomless calibration parameters. The phase is to be
         %%%corrected by the photon pathlength through air and glass
-        L_cal = 99; %Total pathlength in the calibrator (mm). Every mm of air @400Mhz is .48 degrees
+        L_cal = 102.5; %Total pathlength in the calibrator (mm). Every mm of air @400Mhz is .48 degrees
         L_filter = glass; %Total length of glass in the calibrator (mm). Every mm of glass @400Mhz is .32 degrees
         c = 2.9979e11; %Speed of light (mm/s)
         n_air = 1; %Index of refraction of free space
