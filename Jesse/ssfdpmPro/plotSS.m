@@ -13,9 +13,9 @@ else
 Position= [10 100 600 600];
 set(fignum,'Position',Position)
 set(fignum, 'Name', dat.title); 
-% subplot(2,1,1); 
 %errorbar(dat.diodes, dat.diodMus, dat.diodDmus,'r*');
-plot(diodes, fdpmdat.mus,'r*');
+subplot(2,1,1)
+plot(diodes, fdpmdat.mus,'ro','markersize',4);
 % hold on; plot(wvrange, dat.mus); 
 legend('{\mu}_s spectrum','{\mu}_s fdpm',0,'Location','Best'); 
 xlabel('Wavelength (nm)');

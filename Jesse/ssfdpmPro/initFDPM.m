@@ -1,4 +1,4 @@
-function final = initFDPM(fdpm, cal, files)
+function final = initFDPM(fdpm, cal, files,j)
 %%%byh This function mainly opens the measurement files and removes the
 %%%instrument response
 
@@ -26,7 +26,7 @@ if raw.error~=0, return; end
 % Calibrate Raw Data
 %%%byh Calibration factors are used by subtracting from measured phase, and
 %%%dividing into measured amplitude
-calibrated = calibrateFDPM(cal, raw, fdpm.freqrange);
+calibrated = calibrateFDPM(cal, raw, fdpm.freqrange,j);
 % Window data to give freq range and filter phase jumps out if needed and set distance!
 %%%byh A subset of frequencies can be used in the processing, here we
 %%%reduce the measurement data to frequencies in the subset range.  We also

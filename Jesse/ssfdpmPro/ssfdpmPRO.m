@@ -34,7 +34,7 @@ for j=1:nFiles
     end 
     
     fdpm.opt.itr=j;
-    final(j) = initFDPM(fdpm, fdpmcal,char(fdpm.files(:,j))); % opens fdpm files, does calibration, windows to frequency range and filters phase jumps
+    final(j) = initFDPM(fdpm, fdpmcal,char(fdpm.files(:,j)),j); % opens fdpm files, does calibration, windows to frequency range and filters phase jumps
     %Derives the tissue optical properties using the system response:
         %Reads the tissue measurement file
         %Calibrates the tissue response using the system reponse (derived
@@ -48,7 +48,7 @@ for j=1:nFiles
     
     plotMu(final(j), fdpmfit(j), fdpm.diodes,pro.prefixes{j},1,pro);
     %Plots the calibrated data and best fitting amplitude/phase
-    plotSS(spec.wvrange, fdpmfit(j), ssfdpmfit(j), fdpm.diodes, pro.prefixes{j}, 2, spec.usediodes, pro);  %need to modify this function slightly since added argument
+    plotSS(spec.wvrange, fdpmfit(j), ssfdpmfit, fdpm.diodes, pro.prefixes{j}, 2, spec.usediodes, pro);  %need to modify this function slightly since added argument
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% SPEC FIT
     if spec.on

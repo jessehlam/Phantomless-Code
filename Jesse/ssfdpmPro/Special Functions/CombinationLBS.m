@@ -6,8 +6,8 @@ warning('off')
 % dirString = 'C:\Users\Kyle\Downloads\150310';
 % pathString = 'C:\Users\Kyle\Downloads\150310\150310';
 % phantomList = {'ARYA' 'INO1' 'OBERYN1' 'VACS1' 'VACS2' 'PH010' 'ACRIN2' 'BOT1'};
-dirString = 'C:\Users\Jesse\Desktop\Phantoms\d4\combined';
-pathString = 'C:\Users\Jesse\Desktop\Phantoms\d4\msmt';
+dirString = 'C:\Users\Jesse\Desktop\Measurement\150313\combined';
+pathString = 'C:\Users\Jesse\Desktop\Measurement\150313\msmt';
 phantomList = {'ARYA4' 'OBERYN1'};
 for lists = 1:length(phantomList)
     % files = dir(strcat(pathString,'\*ARYA4-MATCH-dcswitch.asc'))

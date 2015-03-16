@@ -1,27 +1,23 @@
 function fcalc = freqcalc(guiVal)
 %Importing data
 dataloc=strcat(guiVal.dataDir,guiVal.patientID,'\',guiVal.date,'\'); %Getting location of dark file
-darkimport=importdata(strcat(dataloc,'DARK-dcswitch.asc')); %Reconstructing location of dark file
+fcalc.dark=importdata(strcat(dataloc,'DARK-dcswitch.asc')); %Reconstructing location of dark file
 msmtimport=importdata(strcat(dataloc,guiVal.prefixList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 phanimport=importdata(strcat(dataloc,guiVal.phantomList{1},'-dcswitch.asc')); %Reconstructing location of msmt file
 freq=darkimport.data(:,1); %Importing frequency range
 
-fcalc.dark=darkimport.data;
-fcalc.msmt=msmtimport.data;
-fcalc.cal=phanimport.data;
-
 %Converted to log amplitude
-darkdat=20*log10(darkimport.data); %Importing dark data
-msmtdat=20*log10(msmtimport.data); %Importing "tissue" data
-phandat=20*log10(phanimport.data); %Importing calibrator data
+fcalc.darkdat=20*log10(darkimport.data); %Importing dark data
+fcalc.msmtdat=20*log10(msmtimport.data); %Importing "tissue" data
+fcalc.phandat=20*log10(phanimport.data); %Importing calibrator data
 
 %% Recording the higher frequency cutoff
 for p=1:length(guiVal.fdpm_diodes)
-    dark=darkdat(:,2*p+1); %Pulling dark
-    cal=phandat(:,2*p+1); %Pulling calibrator
-    tissue=msmtdat(:,2*p+1); %Pulling "tissue"
+    dark=fcalc.darkdat(:,2*p+1); %Pulling dark
+    cal=fcalc.phandat(:,2*p+1); %Pulling calibrator
+    tissue=fcalc.msmtdat(:,2*p+1); %Pulling "tissue"
     
-    fcalc.caldat(:,p)=tissue./cal; %Calibrated signal
+%     caldat=tissue./cal; %Calibrated signal
     snrmsmt=tissue./dark; %Calculating the SNR of the calibrator
     snrphan=cal./dark; %Calculating the SNR on the "tissue"
 
@@ -50,4 +46,4 @@ for p=1:length(guiVal.fdpm_diodes)
     end
 end
 
-fcalc.down=min(fcalc.down); %Using the lowest frequency cutoff
+fcalc.down=min(fcalc.down);

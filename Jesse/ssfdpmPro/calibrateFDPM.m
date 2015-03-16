@@ -1,4 +1,4 @@
-function calibrated=calibrateFDPM(cal,raw,freqrange)
+function calibrated=calibrateFDPM(cal,raw,freqrange,j)
 % send in calibration factors and raw data and return calibrated data
 % Output:
 % calibrated.AC
@@ -7,7 +7,7 @@ function calibrated=calibrateFDPM(cal,raw,freqrange)
 % calibrated.dphi
 % calibrated.freq
 % calibrated.dist
-
+% freqrange=[freqrange(1) freqrange(j+1)];
 ind = find(raw.freq>=freqrange(1) & raw.freq<=freqrange(2));
 calibrated.AC=raw.AC./cal.AC;
 calibrated.phase=raw.phase-cal.phase;

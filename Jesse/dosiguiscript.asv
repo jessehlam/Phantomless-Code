@@ -5,7 +5,7 @@ clear physio
 clear p
 global guiVal;
 
-plotraw=1; %Plot raw data?
+plotraw=0; %Plot raw data?
 rho=23.5; %S-D separation
 fdpm.glass=5.2; %Length of glass in calibrator
 yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
@@ -98,14 +98,14 @@ fdpm.stderr=[0.03, 0.3];
 % used when reading in fdpm files averageFDPMDataAtDiodes.m
 
 if smartfreq==1
-    fcalc=freqcalc(guiVal);
+    fcalc=freqcalc(guiVal,fdpm,plotraw);
 end
 %Calculates the starting  and ending frequency
 
 if smartfreq==1;
-    fdpm.freqrange = [100 fcalc.down]; %Lose the 50mhz noise, use rest of freq band
+    fdpm.freqrange = [100; fcalc.down]; %Lose the 50mhz noise, use rest of freq band
 else
-    fdpm.freqrange = [50 400]; %Needs as much freq info as possible, start at 50mhz
+    fdpm.freqrange = [100; 600]; %Needs as much freq info as possible, start at 50mhz
 end
 
 % fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
@@ -317,12 +317,18 @@ p.verbose = 1;
 p.graphing = 1;
 % turns on graphing during processing
 
+% p.savefitgraphs=0;
+% % saves graphs to file
+% 
+% p.fileWrite=0;
+% saves output files
+
 p.gridimager=0;
 % runs additional gridimager module
 
 %%Run Processing
-rawplot(plotraw,fcalc,fdpm)
 error = ssfdpmPRO(fdpm,spec,physio,bw,p);
+rawplot
 cd(yourDIR);
 %For some reason, program changes directory to where the data is. This will
 %force it to go back to your own directory.
