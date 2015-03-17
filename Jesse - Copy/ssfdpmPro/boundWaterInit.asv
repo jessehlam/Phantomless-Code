@@ -1,0 +1,159 @@
+function [Lib_data, Lib_water] = boundWaterInit(spec_dir, conc_en)
+
+wLib_num = 30;  %number of temperature columns 
+fnamewLib = 'water_spectemp_7_9_04_corrected_v2.txt';
+%fat for library
+fLib_num = 2;%18; %
+fnamefLib = 'van_veen.txt';
+%nigrosin for library
+nLib_num = 10;
+fnamenLib = 'nigrosin_spectemp_6_23_04.txt';
+%Hb
+hLib_num = 2;
+fnamehLib = 'Hb_600.txt';
+%HbO2
+oLib_num = 2;
+fnameoLib = 'HbO2_600.txt';
+%silicone
+sLib_num = 2;
+fnamesLib = 'silicone_spec.txt';
+%ethanol
+eLib_num = 2; %11; %
+fnameeLib = 'ethanol_8_03.txt';
+%met-hb
+mLib_num = 2; %11; %
+fnamemLib = 'MetHb_600.txt';
+
+cd(spec_dir);
+
+fid_wLib = fopen(char(fnamewLib));
+Data_wLib = fscanf(fid_wLib,'%lg',[wLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_wLib);
+
+%Read in fat library data (soybean oil measurement from spectraphotometer)
+fid_fLib = fopen(char(fnamefLib));
+Data_fLib = fscanf(fid_fLib,'%lg',[fLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_fLib);
+
+%Nigrosin
+fid_nLib = fopen(char(fnamenLib));
+Data_nLib = fscanf(fid_nLib,'%lg',[nLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_nLib);
+
+%Hb
+fid_hLib = fopen(char(fnamehLib));
+Data_hLib = fscanf(fid_hLib,'%lg',[hLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_hLib);
+
+%HbO2
+fid_oLib = fopen(char(fnameoLib));
+Data_oLib = fscanf(fid_oLib,'%lg',[oLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_oLib);
+
+%Read in silicone library data
+fid_sLib = fopen(char(fnamesLib));
+Data_sLib = fscanf(fid_sLib,'%lg',[sLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_sLib);
+
+%Read in ethanol library data
+fid_eLib = fopen(char(fnameeLib));
+Data_eLib = fscanf(fid_eLib,'%lg',[eLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_eLib);
+
+%Read in MetHb library data
+fid_mLib = fopen(char(fnamemLib));
+Data_mLib = fscanf(fid_mLib,'%lg',[mLib_num+1 inf]);%[num+1 inf]);   % read numerical data
+fclose(fid_mLib);
+
+numlambda_wLib = length(Data_wLib(1,:))-1;
+numlambda_fLib = length(Data_fLib(1,:))-1;
+numlambda_nLib = length(Data_nLib(1,:))-1;
+numlambda_hLib = length(Data_hLib(1,:))-1;
+numlambda_oLib = length(Data_oLib(1,:))-1;
+numlambda_sLib = length(Data_sLib(1,:))-1;
+numlambda_eLib = length(Data_eLib(1,:))-1;
+numlambda_mLib = length(Data_mLib(1,:))-1;
+
+%Water Library
+for j=1:numlambda_wLib;  
+    Lib_wlength(j) = Data_wLib(1,j+1);
+    for i=1:wLib_num;
+        Lib_water(i) = Data_wLib(i+1,1);
+        water_mua(j,i) = Data_wLib(i+1,j+1);
+    end
+end
+% Lib_water = Lib_water*.99+4;
+
+%fat library
+for j=1:numlambda_fLib;
+    fwlength(j) = Data_fLib(1, j+1);
+    for i=1:fLib_num;
+        fbw(i) = Data_fLib(i+1,1);
+        lipid_mua(j,i) = Data_fLib(i+1,j+1);
+    end
+end
+
+%nigrosin library
+for j=1:numlambda_nLib;
+    nwlength(j) = Data_nLib(1, j+1);
+    for i=1:nLib_num;
+        nbw(i) = Data_nLib(i+1,1);
+        nigrosin_mua(j,i) = Data_nLib(i+1,j+1);
+    end
+end
+
+%Hb library
+for j=1:numlambda_hLib;
+    hwlength(j) = Data_hLib(1, j+1);
+    for i=1:hLib_num;
+        hbw(i) = Data_hLib(i+1,1);
+        Hb_mua(j,i) = Data_hLib(i+1,j+1);
+    end
+end
+
+%HbO2 library
+for j=1:numlambda_oLib;
+    owlength(j) = Data_oLib(1, j+1);
+    for i=1:oLib_num;
+        obw(i) = Data_oLib(i+1,1);
+        HbO2_mua(j,i) = Data_oLib(i+1,j+1);
+    end
+end
+
+%silicone library
+for j=1:numlambda_sLib;
+    swlength(j) = Data_sLib(1, j+1);
+    for i=1:sLib_num;
+        sbw(i) = Data_sLib(i+1,1);
+        silicone_mua(j,i) = Data_sLib(i+1,j+1);
+    end
+end
+
+%Ethanol library
+for j=1:numlambda_eLib;
+    ewlength(j) = Data_eLib(1, j+1);
+    for i=1:eLib_num;
+        ebw(i) = Data_eLib(i+1,1);
+        ethanol_mua(j,i) = Data_eLib(i+1,j+1);
+    end
+end
+
+%MetHb library
+for j=1:numlambda_mLib;
+    mwlength(j) = Data_mLib(1, j+1);
+    for i=1:mLib_num;
+        mbw(i) = Data_mLib(i+1,1);
+        MetHb_mua(j,i) = Data_mLib(i+1,j+1);
+    end
+end
+
+%************* Creating Lib_data matrix **********************************
+Lib_data(:,:,1) = ones(size(water_mua))*conc_en(1); % Baseline chromophore
+Lib_data(:,:,2) = water_mua;
+Lib_data(:,:,3) = interpR(fbw, fwlength, lipid_mua, Lib_water', Lib_wlength) * conc_en(3);
+Lib_data(:,:,4) = interpR(nbw, nwlength, nigrosin_mua, Lib_water', Lib_wlength) * conc_en(4);
+Lib_data(:,:,5) = interpR(hbw, hwlength, Hb_mua, Lib_water', Lib_wlength) * conc_en(5);
+Lib_data(:,:,6) = interpR(obw, owlength, HbO2_mua, Lib_water', Lib_wlength) * conc_en(6);
+Lib_data(:,:,7) = interpR(sbw, swlength, silicone_mua, Lib_water', Lib_wlength) * conc_en(7);
+Lib_data(:,:,8) = interpR(ebw, ewlength, ethanol_mua, Lib_water', Lib_wlength) * conc_en(8);
+Lib_data(:,:,9) = interpR(mbw, mwlength, MetHb_mua, Lib_water', Lib_wlength) * conc_en(9);
