@@ -34,3 +34,4 @@ calibrated = calibrateFDPM(cal, raw, fdpm.freqrange,j);
 final = setFreqRangeJumpsDistance(calibrated, fdpm.freqrange, fdpm.opt.jumps, fdpm.ndiodes, fdpm.opt.rfixed);
 final.phantom_used=fdpm.cal.phantoms_short(cal.phantom_used);
 final.timestamp = raw.timestamp;
+final.raw = raw

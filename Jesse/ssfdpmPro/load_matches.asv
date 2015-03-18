@@ -1,0 +1,68 @@
+cal1 = importdata(strcat(fdpm.files{1}(1:45),'MATCH-dcswitch.asc'))
+cal2 = importdata(strcat(fdpm.files{1}(1:45),'MATCH2-dcswitch.asc'))
+
+longFreq=cal1.data(:,1);
+startrange = find(longFreq == final.freq(1));
+endrange = find(longFreq == final.freq(end));
+shortFreq = longFreq(startrange:endrange);
+cal1.amp = cal1.data(startrange:endrange,3)
+cal2.amp = cal2.data(startrange:endrange,3)
+cal1.phase = cal1.data(startrange:endrange,2)
+cal2.phase = cal2.data(startrange:endrange,2)
+
+calcalamp = cal1.amp./cal2.amp;
+calcalphase = cal1.phase-cal2.phase
+% calmeasureamp = (fdpmcal.AC(startrange:endrange,1)./fdpmcal.AC(startrange,1))./fdpmfit.amp(:,1)
+% calmeasurephase = fdpmcal.phase(startrange:endrange,1)-fdpmfit.phi(:,1)
+calibratorraw = cal1.amp;
+calibratorrawLog = 20*log10(calibratorraw);
+tissueraw = final.raw.AC(startrange:endrange,1);
+tissuerawLog = 20*log10(tissueraw);
+figure;
+hold on
+plot(longFreq,final.raw.AC(:,1)./final.raw.AC(1,1))
+plot(shortFreq,muafit)
+plot(shortFreq,calibratorraw./calibratorraw(1))
+figure;
+muafit = fdpmfit.amp(:,1);
+% plot(shortFreq,muafit)
+plot(muafit)
+plot(shortFreq,tissueraw)
+
+figure;
+calmeasureamp = cal1.amp(:,1)./tissueraw./muafit;
+calmeasureampLog = calibratorrawLog./tissuerawLog./muafit;
+k
+plot(shortFreq,calmeasureamp)
+% Match Raw = cal1.amp
+% Tissue Raw = tissueraw final.raw.AC
+% % final.
+% amplitude_match = fdpmcal.AC(startrange:endrange,1)./final.AC(:,1)./fdpmfit.amp(:,1);
+% plot(amplitude_match)
+% plot(fdpmcal.AC(startrange:endrange,1))
+% plot(final.AC(:,1))
+% plot(fdpmfit.amp(:,1))
+% % plot(fdpmcal.AC(startrange:endrange,1)/final.AC(startrange,1))
+% figure;
+% plot(shortFreq,calcalamp)
+% title('cal vs cal amplitude')
+% figure;
+% plot(shortFreq,calcalphase)
+% title('cal vs cal phase')
+% 
+% figure;
+% plot(shortFreq,calmeasureamp)
+% % plot(shortFreq,calmeasureamp,shortFreq,calcalamp)
+% title('cal vs measure amplitude')
+% figure;
+% plot(shortFreq,calmeasurephase)
+% title('cal vs measure phase')
+% % figure;
+% % plot(shortFreq,cal1.amp,shortFreq,cal2.amp)
+% % figure;
+% % plot(shortFreq,cal1.amp./cal2.amp)
+% 
+% figure;
+% plot(cal1.amp)
+% figure;
+% plot(final.damp(:,1).*cal1.amp)
