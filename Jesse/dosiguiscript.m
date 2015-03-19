@@ -1,18 +1,19 @@
-
 clear fdpm
 clear spec
 clear physio
 clear p
 global guiVal;
+% handles=get(0,'children') %Getting current figures
+% close(handles); %Closing all figures except the dosigui
 
 plotraw=1; %Plot raw data?
-rho=23.5; %S-D separation
-fdpm.glass=5.2; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
-% fdpm.diodes = [657 779 798 829]; %I somehow broke auto diode checking...
+rho=26; %S-D separation
+fdpm.glass=5.5; %Length of glass in calibrator
+yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
 smartfreq=1;
 p.savefitgraphs=0;
-p.fileWrite=0;
+p.fileWrite=1;
+p.graphing = 1;
 
 %Looks for phantom file in "separate_base_list_filter" line 38 <----
 %i.e. Add your calibration file's naming scheme here
@@ -103,9 +104,9 @@ end
 %Calculates the starting  and ending frequency
 
 if smartfreq==1;
-    fdpm.freqrange = [100 fcalc.down]; %Lose the 50mhz noise, use rest of freq band
+    fdpm.freqrange = [50 fcalc.down]; %Lose the 50mhz noise, use rest of freq band
 else
-    fdpm.freqrange = [50 400]; %Needs as much freq info as possible, start at 50mhz
+    fdpm.freqrange = [50 450]; %Needs as much freq info as possible, start at 50mhz
 end
 
 % fdpm.freqrange = [guiVal.lowFreq; guiVal.highFreq]; 
@@ -314,15 +315,16 @@ p.outLabel=[guiVal.filePrefix];
 p.verbose = 1;
 % turns on console output
 
-p.graphing = 1;
 % turns on graphing during processing
 
 p.gridimager=0;
 % runs additional gridimager module
 
 %%Run Processing
-rawplot(plotraw,fcalc,fdpm)
-error = ssfdpmPRO(fdpm,spec,physio,bw,p);
+if plotraw==1
+    rawplot(plotraw,fcalc,fdpm)
+end
+error = ssfdpmPRO(fdpm,spec,physio,bw,p,guiVal);
 cd(yourDIR);
 %For some reason, program changes directory to where the data is. This will
 %force it to go back to your own directory.

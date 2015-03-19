@@ -1,0 +1,101 @@
+function [R,diodR, rho, fdpmsserr, error] = getReflectance(specfile, specdark, cal, opt, wvrange, diodes, mua, mus, rfixed, n_phantom, fdpmfitchi, whichdiodes, reff_option)
+%%%byh Reads in broadband reflectance files. Applies reflectance calibration.  Scales according to recovered fdpm optical properties  
+
+%%%byh Reads in data and averages in cases of multiple measurements at a
+%%%single point.  We mostly only take single measurements now except for
+%%%calibration standards. 
+spec = averageSpecData(specfile);
+
+if rfixed~=0
+    rho=rfixed;
+else
+    rho=spec.dist;
+end
+if spec.darkCorrected~=1
+    if isempty(specdark)
+        cutoff=findstr('\',specfile);
+        path=specfile(1:cutoff(length(cutoff)));
+        specdark=strcat(path,'dark-',num2str(spec.intTimeProgram),'-1-tis.asc');
+    end
+    darkspec = averageSpecData(specdark);
+    if darkspec.error<0
+        error=0;
+        return
+    end
+    if opt.spike
+        darkspec.amp = spectrumSmoother(darkspec.amp,2,opt.spikewindow,opt.spike); %remove spikes
+        darkspec.amp = spectrumSmoother(darkspec.amp,1,opt.boxcar);   %filer
+    end
+    spec.amp = spec.amp - darkspec.amp;
+end
+%%%byh We've always done some smoothing to the reflectance curves but its
+%%%likely unnecessary.  If I can verify that, then this would not be ported.
+spec.amp = spectrumSmoother(spec.amp,1,opt.boxcar);
+spec.amp = spectrumSmoother(spec.amp,3);
+
+%%%byh Measured reflectance is divided by the reflectance calibration
+%%%reflectance.
+if opt.docal
+    spec.amp = spec.amp./cal.amp;
+    spec.amp = spectrumSmoother(spec.amp,1,opt.boxcar);
+end
+
+
+%%%byh This isn't used.  Can be used in cases where we find a problem with
+%%%the spectrometer calibration. 
+if opt.lambdashift~=0
+    delta = spec.wv(2) - spec.wv(1);
+    skip_pixels = round(opt.lambdashift/delta);
+    for j=1:length(spec.wv)
+        if j>abs(skip_pixels) || j<length(spec.amp)-abs(skip_pixels)
+            spec.amp(j) = spec.amp(j+skip_pixels);   %why isn't this a wavelength shift?
+        end
+    end
+end
+
+%%%byh Much like we do with frequencies in the fdpm, we can set a different
+%%%wavelength range to use for the ssfdpm fit.  We do an interpolation to
+%%%this new set of wavelengths.  
+RatSpec = interp1(spec.wv, spec.amp, wvrange);
+
+
+%%%byh We store the calibration coefficients for all of our reflectance
+%%%standards in sphere_lookup.  The filename is standardized to match up
+%%%with the m file.  Here the correct calibration coefficients are
+%%%read in and then applied to the reflectance curve.  
+polysphere=sphere_lookup(cal.file);
+if ~isempty(polysphere) && opt.docal
+    RatSpec = RatSpec.*polyval(polysphere,wvrange);
+
+end
+if sum(whichdiodes)<length(diodes)
+    diodes=diodes(whichdiodes==1);
+    mua=mua(whichdiodes==1);
+    mus=mus(whichdiodes==1);
+    fdpmfitchi=fdpmfitchi(whichdiodes==1);
+end 
+
+%%%byh Using the broadband reflectance, we then use interpolation to
+%%%determine the reflectance at the FDPM wavelengths.
+RatFDPM = interp1(wvrange, RatSpec, diodes);
+%%%byh We calculate a theoretical reflectance at each of the FDPM
+%%%wavelengths using the recovered optical properties from the FDPM fit
+diodR = Rtheory(mua,mus,rho,n_phantom, reff_option);
+%%%byh We then scale the measured reflectance to the theoretical.  R0 is the scaling factor which is then applied to the measured reflectance.   
+if opt.mua_robust==0
+    R0 = RatFDPM'\diodR';
+else
+    R0_wt = 1./fdpmfitchi'*min(fdpmfitchi);    %normalize so that lowest chi2 is wt of 1
+    R0 = lscov(RatFDPM',diodR',R0_wt);
+end
+%R0=.00002;
+%R0=R0-.4*R0;
+R = R0.*RatSpec;
+
+% plot(wvrange,x);
+%R=please;
+fdpmsserr = diodR-RatFDPM*R0;   %differential between fdpm reflectance and ss reflectance
+error = 0;
+
+           
+           

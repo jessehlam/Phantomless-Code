@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>mc</name>
+    </assembly>
+    <members>
+        <member name="M:Vts.MonteCarlo.CommandLineApplication.MonteCarloSetup.ReadSimulationInputFromFile(System.String)">
+            <summary>
+            method to read the simulation input from a specified or default file
+            </summary>
+        </member>
+        <member name="M:Vts.MonteCarlo.CommandLineApplication.MonteCarloSetup.RunSimulations(System.Collections.Generic.IEnumerable{Vts.MonteCarlo.SimulationInput},System.String)">
+            <summary>
+            Runs multiple Monte Carlo simulations in parallel using all available CPU cores
+            </summary>
+        </member>
+        <member name="T:Vts.MonteCarlo.CommandLineApplication.Program">
+            <summary>
+            Monte Carlo command line application program.  Type "mc help" for
+            a description of the different command line parameters.
+            </summary>
+        </member>
+        <member name="M:Vts.MonteCarlo.CommandLineApplication.Program.ShowHelp">
+            <summary>
+            Displays the help text for detailed usage of the application
+            </summary>
+        </member>
+        <member name="M:Vts.MonteCarlo.CommandLineApplication.Program.ShowHelp(System.String)">
+            <summary>
+            Displays the help text for the topic passed as a parameter
+            </summary>
+            <param name="helpTopic">Help topic</param>
+        </member>
+    </members>
+</doc>
