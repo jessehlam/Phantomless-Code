@@ -6,13 +6,13 @@ global guiVal;
 % handles=get(0,'children') %Getting current figures
 % close(handles); %Closing all figures except the dosigui
 
-plotraw=1; %Plot raw data?
-rho=26; %S-D separation
+plotraw=0; %Plot raw data?
+rho=20; %S-D separation
 fdpm.glass=5.5; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Phantomless-Code\Jesse'; %Your directory here
+yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
 smartfreq=1;
 p.savefitgraphs=0;
-p.fileWrite=1;
+p.fileWrite=0;
 p.graphing = 1;
 
 %Looks for phantom file in "separate_base_list_filter" line 38 <----

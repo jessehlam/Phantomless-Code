@@ -25,8 +25,8 @@ for p=1:length(guiVal.fdpm_diodes)
     snrmsmt=tissue./dark; %Calculating the SNR of the calibrator
     snrphan=cal./dark; %Calculating the SNR on the "tissue"
 
-    msmtcut=find(snrmsmt>0.9,1); %Finding the cutoff for acceptable SNR
-    phancut=find(snrphan>0.9,1);
+    msmtcut=find(snrmsmt>0.8,1); %Finding the cutoff for acceptable SNR
+    phancut=find(snrphan>0.8,1);
 
     if isempty(msmtcut) %If the entire amplitude is above the noise floor, set to the max freq
         msmtcut=max(freq);

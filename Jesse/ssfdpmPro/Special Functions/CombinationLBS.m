@@ -6,9 +6,9 @@ clc
 % dirString = 'C:\Users\Kyle\Downloads\150310';
 % pathString = 'C:\Users\Kyle\Downloads\150310\150310';
 % phantomList = {'ARYA' 'INO1' 'OBERYN1' 'VACS1' 'VACS2' 'PH010' 'ACRIN2' 'BOT1'};
-dirString = 'C:\Users\Jesse\Desktop\Phantoms\d6\';
-pathString = 'C:\Users\Jesse\Desktop\Phantoms\d6\Two Rho\';
-phantomList = {'PH010'};
+dirString = 'C:\Users\Jesse\Desktop\Measurement\150316\';
+pathString = 'C:\Users\Jesse\Desktop\Measurement\150316\msmt\';
+phantomList = {'Oberyn1'};
 
 % lists = 2;
 %%
@@ -39,31 +39,31 @@ for lists = 1:length(phantomList)
         sumData(:,1) = data.data(:,1);
 %         sumData(:,2*i) = data.data(:,2*i);
 %         sumData(:,2*i+1) = data.data(:,2*i+1); 
-        if strcmp(wvcase,'660')
+%         if strcmp(wvcase,'660')
+%             sumData(:,2*i) = data.data(:,2);
+%             sumData(:,2*i+1) = data.data(:,3);
+%         elseif strcmp(wvcase, '690')
+%             sumData(:,2*i) = data.data(:,4);
+%             sumData(:,2*i+1) = data.data(:,5);
+        if strcmp(wvcase,'778')
             sumData(:,2*i) = data.data(:,2);
             sumData(:,2*i+1) = data.data(:,3);
-        elseif strcmp(wvcase, '690')
+        elseif strcmp(wvcase,'800')
             sumData(:,2*i) = data.data(:,4);
             sumData(:,2*i+1) = data.data(:,5);
-        elseif strcmp(wvcase,'778')
+        elseif strcmp(wvcase,'830')
             sumData(:,2*i) = data.data(:,6);
             sumData(:,2*i+1) = data.data(:,7);
-        elseif strcmp(wvcase,'800')
+        elseif strcmp(wvcase,'855')
             sumData(:,2*i) = data.data(:,8);
             sumData(:,2*i+1) = data.data(:,9);
-        elseif strcmp(wvcase,'830')
-            sumData(:,2*i) = data.data(:,10);
-            sumData(:,2*i+1) = data.data(:,11);
-        elseif strcmp(wvcase,'855')
-            sumData(:,2*i) = data.data(:,12);
-            sumData(:,2*i+1) = data.data(:,13);
         end
         
 %         sumData(:,2*i) = data.data(:,2);
 %         sumData(:,2*i+1) = data.data(:,3);
     end
     
-    headerLine12 = 'Laser names: 657 690 779 798 829 855 *End of laser names';
+    headerLine12 = 'Laser names: 779 798 829 855 *End of laser names';
     headerLine16= {'Frequency (MHz)' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp' 'phase' 'amp'};
     cd(dirString)
     if j == 1  

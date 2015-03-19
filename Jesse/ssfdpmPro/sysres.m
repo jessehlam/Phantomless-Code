@@ -48,8 +48,8 @@ end
 
 %% Getting the recovered system response
 
-% fdpmfit.mua=[0.00719955800000000;0.00673395200000000;0.00588275500000000;0.0133511560000000];
-% fdpmfit.mus=[0.888075728000000;0.860057492000000;0.824719084000000;0.815834258000000];
+fdpmfit.mua=[[0.00488001900000000;0.00478435700000000;0.00423343600000000;0.0149740970000000]];
+fdpmfit.mus=[[0.750843287000000;0.729670581000000;0.692955251000000;0.745229643000000]];
 
 for p=1:nDiodes %Loop through number of diodes
     theory=feval('p1seminf',[fdpmfit.mua(p),fdpmfit.mus(p)], freq, 0, fdpm.n, final.dist, 0, noWt, 0, fdpm.boundary_option);
@@ -72,27 +72,34 @@ figure(5); %New figure
 % cmap=distinguishable_colors(nDiodes*2); %Different colors per plot
 
 for h=1:nDiodes
-    %Finding the slope
+    %Fitting polynomials
     flatpoly=polyfit(freq,flatamp(:,h)./flatamp(1,h),1); %Fitting line to obtain slope
     guesspoly=polyfit(freq,guessamp(:,h)./guessamp(1,h),1); %Fitting line to obtain slope
     slopeval=polyval(guesspoly,freq); %Fitting line to recovered system response
     flatval=polyval(flatpoly,freq); %Fitting line to standard
-    slope=guesspoly(1)/flatpoly(1); %Recording recovered to standard slope ratio
+%     slope=guesspoly(1)/flatpoly(1); %Recording recovered to standard slope ratio
+
+    %Calculating the slopes
+    slopeflat=(flatval(end)-flatval(1))/(freq(end)-freq(1));
+    slopeguess=(slopeval(end)-slopeval(1))/(freq(end)-freq(1));
+%     slope=slopeguess/slopeflat; %Recording recovered to standard slope ratio
+    slopes=[slopeflat slopeguess].*10^6; %Recording raw slope, scaled
     
     %Plotting
     subplot(2,ceil(nDiodes/2),h,'align');
     plot(freq,flatamp(:,h)./flatamp(1,h),'k*','linewidth',2) %Plotting standard
     hold on
     plot(freq,guessamp(:,h)./guessamp(1,h),'r*','markersize',2) %Plotting recovered
-    plot(freq,slopeval,'r','linewidth',2); %Plotting recovered slope
-    plot(freq,flatval,'k','linewidth',2); %Plot standard's slope
+    s1=plot(freq,slopeval,'r','linewidth',2); %Plotting recovered slope
+    s2=plot(freq,flatval,'k','linewidth',2); %Plot standard's slope
     xlabel('Frequency (MHz)');
     ylabel('Amplitude (a.u.)');
-    title(strcat(titles{h},'Slope Ratio:',num2str(slope))); %Eventually change title to slope of amps
+    title(strcat(titles{h},'Slopes:',num2str(slopes))); %Eventually change title to slope of amps
     xlim([min(freq) max(freq)]);
 %     ylim([.95 1.05]);
 end
 
+legend([s1 s2],{'Recovered','Benchmark'})
 figure(6);
 
 for k=1:nDiodes
@@ -102,20 +109,21 @@ for k=1:nDiodes
     guessavg=mean(guessphi(:,k)); %Finding the average phase
     avgval=polyval(guessavg,freq); %Horizontal line of the recovered phase
     stanavg=polyval(flatavg,freq); %Horizontal line of the standard's phase
-    phiavg=flatavg-guessavg; %Recording the phase
+    phiavg=guessavg-flatavg; %Recording the phase
     
     subplot(2,ceil(nDiodes/2),k,'align');
     plot(freq,flatphi(:,k),'k*','linewidth',2) %Plotting standard
     hold on
     plot(freq,guessphi(:,k),'b*','markersize',2) %Plotting recovered
-    plot(freq,avgval,'b','linewidth',2) %Plotting recovered phase avg
-    plot(freq,stanavg,'k','linewidth',2) %Plotting standard's phase avg
+    d1=plot(freq,avgval,'b','linewidth',2); %Plotting recovered phase avg
+    d2=plot(freq,stanavg,'k','linewidth',2); %Plotting standard's phase avg
     xlabel('Frequency (MHz)');
     ylabel('Phase (Degrees)');
     title(strcat(titles{k},'Degree Difference:',num2str(phiavg))); %Eventually change title to average degrees
     xlim([min(freq) max(freq)]);
 end
 
+legend([d1 d2],{'Recovered','Benchmark'})
 %%
 % legend('Standard','Recovered','location','eastoutside');
 
