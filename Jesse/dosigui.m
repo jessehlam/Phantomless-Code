@@ -100,7 +100,7 @@ function loaddir_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global guiVal;
-tempdir = uigetdir;
+tempdir = uigetdir('\\128.200.57.212\Photon Portal\Data\data.phantomless\');
 id = findobj( 'Tag', 'txtDataDir' );
 if(tempdir~=0)
     set( id, 'String', tempdir);

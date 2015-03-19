@@ -3,16 +3,15 @@ clear spec
 clear physio
 clear p
 global guiVal;
-% handles=get(0,'children') %Getting current figures
-% close(handles); %Closing all figures except the dosigui
 
 plotraw=0; %Plot raw data?
-rho=20; %S-D separation
+rho=26; %S-D separation
 fdpm.glass=5.5; %Length of glass in calibrator
-yourDIR='C:\Users\Jesse\Documents\Phantomless-Code\Jesse'; %Your directory here
-smartfreq=1;
-p.savefitgraphs=0;
-p.fileWrite=0;
+currentdir=mfilename('fullpath'); %Geting .m directory
+yourDIR=currentdir(1:end-14); %Saves .m directory to return here
+smartfreq=1; %Automatically calculate higher frequency cut off? (based on noise floor)
+p.savefitgraphs=0; %Save chi-squared fits?
+p.fileWrite=0; %Write recovered optical properties to file? (.sum file only)
 p.graphing = 1;
 
 %Looks for phantom file in "separate_base_list_filter" line 38 <----
